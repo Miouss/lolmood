@@ -59,7 +59,7 @@ const runeImg = importAll(
 );
 
 export const getRuneImg = (id) => {
-  if(typeof runePathImg[id] === 'object'){
+  if (typeof runePathImg[id] === "object") {
     return runeImg[`${runePathImg[id]["icon"]}`];
   }
 

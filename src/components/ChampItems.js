@@ -1,193 +1,38 @@
-import { initializeTree, getItemImg } from "./runesImg";
+import { getItemImg } from "./runesImg";
 
 import itemSetFrameSVG from "../assets/items-set-frame.svg";
 import itemSetDesignSVG from "../assets/items-set-design.svg";
 
 import "../styles/ChampItems.css";
 
-function ChampItems(props) {
-  let startItemsMP = initializeTree(
-    props.startItems["mostPlayed"][0],
-    "startItems",
-    props.startItems["mostPlayed"][0]["startItems"].length,
-    getItemImg
-  );
-  let startItemsMW = initializeTree(
-    props.startItems["mostWinrate"][0],
-    "startItems",
-    props.startItems["mostWinrate"][0]["startItems"].length,
-    getItemImg
-  );
+function ChampItems({ starting, completed, displayPickRate }) {
+  let startItems = {
+    MP: initializeItems(starting.mostPlayed),
+    MW: initializeItems(starting.mostWinrate, false),
+  };
 
-  let coreItemsMP =
-    typeof props.completedItems["coreItems"] !== "string"
-      ? initializeTree(
-          props.completedItems["coreItems"]["mostPlayed"][0],
-          "coreItems",
-          props.completedItems["coreItems"]["mostPlayed"][0]["coreItems"]
-            .length,
-          getItemImg
-        )
-      : undefined;
-  let coreItemsMW =
-    typeof props.completedItems["coreItems"] !== "string"
-      ? initializeTree(
-          props.completedItems["coreItems"]["mostWinrate"][0],
-          "coreItems",
-          props.completedItems["coreItems"]["mostWinrate"][0]["coreItems"]
-            .length,
-          getItemImg
-        )
-      : undefined;
+  let coreItems = {
+    MP: initializeItems(completed.core.mostPlayed),
+    MW: initializeItems(completed.core.mostWinrate, false),
+  };
+  let nthItems = {
+    4: {
+      MP: initializeNthItems(completed.nth.mostPlayed[0]),
+      MW: initializeNthItems(completed.nth.mostWinrate[0], false),
+    },
+    5: {
+      MP: initializeNthItems(completed.nth.mostPlayed[1]),
+      MW: initializeNthItems(completed.nth.mostWinrate[1], false),
+    },
+    6: {
+      MP: initializeNthItems(completed.nth.mostPlayed[2]),
+      MW: initializeNthItems(completed.nth.mostWinrate[2], false),
+    },
+  };
 
-  let fourthItemsMP = fillMultipleItemsArray("fourthItem", "mostPlayed");
-  let fifthItemsMP = fillMultipleItemsArray("fifthItem", "mostPlayed");
-  let sixthItemsMP = fillMultipleItemsArray("sixthItem", "mostPlayed");
+  console.debug(nthItems);
 
-  let fourthItemsMW = fillMultipleItemsArray("fourthItem", "mostWinrate");
-  let fifthItemsMW = fillMultipleItemsArray("fifthItem", "mostWinrate");
-  let sixthItemsMW = fillMultipleItemsArray("sixthItem", "mostWinrate");
-
-  function fillMultipleItemsArray(nthItem, rate) {
-    let nthItems = [];
-
-    if (props.completedItems[nthItem] === "No stats were found") {
-      nthItems[0] = { id: 7050, img: getItemImg(7050), played: 0 };
-    } else {
-      props.completedItems[nthItem][rate].forEach((oneItem, index) => {
-        nthItems[index] = oneItem;
-        nthItems[index]["img"] = getItemImg(nthItems[index][nthItem]);
-      });
-    }
-
-    return nthItems;
-  }
-
-  let startItems,
-    coreItems,
-    fourthItems,
-    fifthItems,
-    sixthItems,
-    rate = undefined;
-
-  if (props.displayPickRate) {
-    startItems = startItemsMP;
-    coreItems = coreItemsMP;
-    fourthItems = fourthItemsMP;
-    fifthItems = fifthItemsMP;
-    sixthItems = sixthItemsMP;
-    rate = "playRate";
-  } else {
-    startItems = startItemsMW;
-    coreItems = coreItemsMW;
-    fourthItems = fourthItemsMW;
-    fifthItems = fifthItemsMW;
-    sixthItems = sixthItemsMW;
-    rate = "winRate";
-  }
-
-  function getSingleItemContainer(itemsArray) {
-    if (itemsArray[0]["id"] === 7050) {
-      return getEmptyItemsContainer();
-    }
-
-    let itemContainer = [];
-
-    itemsArray.forEach((item) => {
-      itemContainer.push(
-        <>
-          <div className="single-item-container">
-            <img className="items-img" src={item["img"]} />
-            <div className="single-item-container-rate">
-              <span>{item[rate]}%</span>
-              {props.displayPickRate ? null : (
-                <span>{item["played"]} games</span>
-              )}
-            </div>
-          </div>
-        </>
-      );
-    });
-
-    return itemContainer;
-  }
-
-  function getMultipleItemsContainer(itemsArray, type) {
-
-    if(itemsArray === undefined){
-      return getEmptyItemsContainer();
-    }
-
-    let itemContainer = [];
-
-    let duplicateIds = {};
-
-    itemsArray[type].forEach((item) => {
-      if (duplicateIds[item["id"]] === undefined) {
-        duplicateIds[item["id"]] = 1;
-      } else {
-        duplicateIds[item["id"]] += 1;
-      }
-    });
-
-    itemsArray[type].forEach((item) => {
-      if (duplicateIds[item["id"]] !== 0) {
-        let duplicateItemsContainer =
-          duplicateIds[item["id"]] > 1 ? (
-            <>
-              <span className="duplicate-items">
-                x{duplicateIds[item["id"]]}
-              </span>
-            </>
-          ) : null;
-
-        itemContainer.push(
-          <>
-            <div style={{ position: "relative" }}>
-              <img className="items-img" src={item["img"]} />
-              {duplicateItemsContainer}
-            </div>
-          </>
-        );
-        duplicateIds[item["id"]] = 0;
-      }
-    });
-
-    itemContainer.push(
-      <>
-        <div className="single-item-container-rate">
-          <span>{itemsArray["rate"]}%</span>
-          <span>{itemsArray["played"]} games</span>
-        </div>
-      </>
-    );
-
-    return itemContainer;
-  }
-
-  function getPickRateContainerForNthItems(nthItems) {
-    if (nthItems[0]["id"] === 7050) {
-      return null;
-    }
-
-    return (
-      <>
-        <span className="nth-items-container" style={{ paddingLeft: "0.4rem" }}>
-          ({nthItems[0]["played"]} games)
-        </span>
-      </>
-    );
-  }
-
-  function getEmptyItemsContainer() {
-    return (
-      <>
-        <div class="empty-items-container">
-          No games with enough data were found, so there is no items stats to display
-        </div>
-      </>
-    );
-  }
+  const keyType = displayPickRate ? "MP" : "MW";
 
   return (
     <>
@@ -200,35 +45,35 @@ function ChampItems(props) {
             <div id="starting-items">
               <span className="items-title">Starting Items</span>
               <div className="items-display-area">
-                {getMultipleItemsContainer(startItems, "startItems")}
+                {getMultipleItemsContainer(startItems[keyType], "startItems")}
               </div>
             </div>
 
             <div id="core-items">
               <span className="items-title">Core Items</span>
               <div className="items-display-area">
-                {getMultipleItemsContainer(coreItems, "coreItems")}
+                {getMultipleItemsContainer(coreItems[keyType], "coreItems")}
               </div>
             </div>
 
             <div id="fourth-fifth-items-container">
               <div>
                 <span className="items-title">4th Item</span>
-                {props.displayPickRate
-                  ? getPickRateContainerForNthItems(fourthItems)
+                {displayPickRate
+                  ? getPickRateContainerForNthItems(nthItems[4][keyType])
                   : null}
                 <div className="fourth-fifth-items-display-container">
-                  {getSingleItemContainer(fourthItems)}
+                  {getSingleItemContainer(nthItems[4][keyType])}
                 </div>
               </div>
 
               <div>
                 <span className="items-title">5th Item </span>
-                {props.displayPickRate
-                  ? getPickRateContainerForNthItems(fifthItems)
+                {displayPickRate
+                  ? getPickRateContainerForNthItems(nthItems[5]?.[keyType])
                   : null}
                 <div className="fourth-fifth-items-display-container">
-                  {getSingleItemContainer(fifthItems)}
+                  {getSingleItemContainer(nthItems[5]?.[keyType])}
                 </div>
               </div>
             </div>
@@ -236,17 +81,151 @@ function ChampItems(props) {
             <div id="sixth-items">
               <span className="items-title">
                 Last Item{" "}
-                {props.displayPickRate
-                  ? getPickRateContainerForNthItems(sixthItems)
+                {displayPickRate
+                  ? getPickRateContainerForNthItems(nthItems[6]?.[keyType])
                   : null}
               </span>
 
               <div id="sixth-items-display-container">
-                {getSingleItemContainer(sixthItems)}
+                {getSingleItemContainer(nthItems[6]?.[keyType])}
               </div>
             </div>
           </div>
         </div>
+      </div>
+    </>
+  );
+}
+
+function initializeItems(arr, isMostPlayed = true) {
+  const rate = isMostPlayed ? arr.playrate : arr.winrate;
+
+  let arrayType = [];
+
+  arr.items.forEach((item, i) => {
+    arrayType[i] = {
+      id: item,
+      img: getItemImg(item),
+    };
+  });
+
+  return {
+    items: arrayType,
+    played: arr.played,
+    rate: rate,
+  };
+}
+
+function initializeNthItems(arr, isMostPlayed = true) {
+  const rate = isMostPlayed ? arr.playrate : arr.winrate;
+
+  let arrayType = [];
+
+  arr.forEach((item, i) => {
+    arrayType[i] = {
+      id: item.itemId,
+      img: getItemImg(item.itemId),
+      played: item.played,
+      rate: item[rate],
+    };
+  });
+
+  return arrayType;
+}
+
+function getSingleItemContainer(itemsArray, displayPickRate) {
+  if (itemsArray[0]["id"] === 7050) {
+    return getEmptyItemsContainer();
+  }
+
+  let itemContainer = [];
+
+  itemsArray.forEach((item) => {
+    itemContainer.push(
+      <>
+        <div className="single-item-container">
+          <img className="items-img" src={item["img"]} />
+          <div className="single-item-container-rate">
+            <span>{item["rate"]}%</span>
+            {displayPickRate ? null : <span>{item["played"]} games</span>}
+          </div>
+        </div>
+      </>
+    );
+  });
+
+  return itemContainer;
+}
+
+function getPickRateContainerForNthItems(nthItems) {
+  if (!nthItems) {
+    return null;
+  }
+
+  return (
+    <>
+      <span className="nth-items-container" style={{ paddingLeft: "0.4rem" }}>
+        ({nthItems.played} games)
+      </span>
+    </>
+  );
+}
+
+function getMultipleItemsContainer(itemsArray) {
+  if (itemsArray === null) {
+    return getEmptyItemsContainer();
+  }
+
+  let itemContainer = [];
+
+  let duplicateIds = {};
+
+  itemsArray.items.forEach((item) => {
+    if (duplicateIds[item["id"]] === undefined) {
+      duplicateIds[item["id"]] = 1;
+    } else {
+      duplicateIds[item["id"]] += 1;
+    }
+  });
+
+  itemsArray.items.forEach((item) => {
+    if (duplicateIds[item["id"]] !== 0) {
+      let duplicateItemsContainer =
+        duplicateIds[item["id"]] > 1 ? (
+          <>
+            <span className="duplicate-items">x{duplicateIds[item["id"]]}</span>
+          </>
+        ) : null;
+
+      itemContainer.push(
+        <>
+          <div style={{ position: "relative" }}>
+            <img className="items-img" src={item["img"]} />
+            {duplicateItemsContainer}
+          </div>
+        </>
+      );
+      duplicateIds[item["id"]] = 0;
+    }
+  });
+
+  itemContainer.push(
+    <>
+      <div className="single-item-container-rate">
+        <span>{itemsArray["rate"]}%</span>
+        <span>{itemsArray["played"]} games</span>
+      </div>
+    </>
+  );
+
+  return itemContainer;
+}
+function getEmptyItemsContainer() {
+  return (
+    <>
+      <div class="empty-items-container">
+        No games with enough data were found, so there is no items stats to
+        display
       </div>
     </>
   );

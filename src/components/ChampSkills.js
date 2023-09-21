@@ -4,72 +4,62 @@ import champJSON from "../assets/loldata/current/data/en_US/championFull.json";
 
 import "../styles/ChampSkills.css";
 
-function ChampSkills(props) {
-  let qImg = getSpellImg(champJSON["data"][props.champName]["spells"][0]["id"]);
-  let wImg = getSpellImg(champJSON["data"][props.champName]["spells"][1]["id"]);
-  let eImg = getSpellImg(champJSON["data"][props.champName]["spells"][2]["id"]);
-  let rImg = getSpellImg(champJSON["data"][props.champName]["spells"][3]["id"]);
+function ChampSkills({ evolves, champName, skills, displayPickrate }) {
+  let qImg = getSpellImg(champJSON["data"][champName]["spells"][0]["id"]);
+  let wImg = getSpellImg(champJSON["data"][champName]["spells"][1]["id"]);
+  let eImg = getSpellImg(champJSON["data"][champName]["spells"][2]["id"]);
+  let rImg = getSpellImg(champJSON["data"][champName]["spells"][3]["id"]);
 
-  let evolvePriority = props.displayPickrate
-    ? getEvolvesPriority(props.evolves["mostPlayed"]["order"])
-    : getEvolvesPriority(props.evolves["mostWinrate"]["order"]);
+  let evolvePriority = displayPickrate
+    ? getEvolvesPriority(evolves?.mostPlayed.order)
+    : getEvolvesPriority(evolves?.mostWinrate.order);
 
-  let skillsOrder = props.displayPickrate
-    ? props.skills["mostPlayed"]
-    : props.skills["mostWinrate"];
+  let skillsOrder = displayPickrate
+    ? skills["mostPlayed"].order
+    : skills["mostWinrate"].order;
 
-  while (skillsOrder["order"].length < 17) {
-    skillsOrder["order"] += "0";
+  while (skillsOrder.length < 17) {
+    skillsOrder += "0";
   }
+  let skillPriority = getSkillsPriority(skillsOrder);
 
-  let skillPriority = getSkillsPriority(skillsOrder["order"]);
-
-  function getSkillPriorityContainer(index, array) {
+  const getSkillPriorityContainer = (index, array) => {
     let container = undefined;
+    let skillKey, skillImg;
 
     switch (Object.keys(array[index - 1])[0]) {
       case "Q":
-        container = (
-          <>
-            <img src={qImg} alt="slt" />
-            <span>Q</span>
-          </>
-        );
+        skillImg = qImg;
+        skillKey = "Q";
         break;
       case "W":
-        container = (
-          <>
-            <img src={wImg} alt="slt" />
-            <span>W</span>
-          </>
-        );
+        skillImg = wImg;
+        skillKey = "W";
         break;
       case "E":
-        container = (
-          <>
-            <img src={eImg} alt="slt" />
-            <span>E</span>
-          </>
-        );
+        skillImg = eImg;
+        skillKey = "E";
         break;
       case "R":
-        container = (
-          <>
-            <img src={rImg} alt="slt" />
-            <span>R</span>
-          </>
-        );
+        skillImg = rImg;
+        skillKey = "R";
         break;
       default:
     }
 
+    container = (
+      <>
+        <img src={skillImg} alt="slt" />
+        <span>{skillKey}</span>
+      </>
+    );
     return container;
-  }
+  };
 
-  function getSkillsOrderContainer(skillIndex) {
+  const getSkillsOrderContainer = (skillIndex) => {
     let container = [];
 
-    Array.from(skillsOrder["order"]).forEach((skillUped, index) => {
+    Array.from(skillsOrder).forEach((skillUped, index) => {
       if (skillUped === skillIndex) {
         container.push(
           <span
@@ -84,12 +74,14 @@ function ChampSkills(props) {
     });
 
     return container;
-  }
+  };
 
-  function checkEvolvePriority(skillPriority) {
+  const checkEvolvePriority = (skillPriority) => {
     if (skillPriority.length === 0) {
       return (
-          <span style={{flex: "1", fontStyle: "italic", margin: "1rem"}}>This champ has no evolution</span>
+        <span style={{ flex: "1", fontStyle: "italic", margin: "1rem" }}>
+          This champ has no evolution
+        </span>
       );
     }
 
@@ -112,7 +104,7 @@ function ChampSkills(props) {
         </div>
       </>
     );
-  }
+  };
 
   return (
     <>
@@ -185,6 +177,8 @@ function getSkillsPriority(skillsPath) {
 }
 
 function getEvolvesPriority(evolvesPath) {
+  if (!evolvesPath) return null;
+
   let qIndex = evolvesPath.indexOf("1");
   let wIndex = evolvesPath.indexOf("2");
   let eIndex = evolvesPath.indexOf("3");

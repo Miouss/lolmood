@@ -1,9 +1,4 @@
-import {
-  getRuneImg,
-  getStyleName,
-  statsModImgs,
-  initializeTree,
-} from "./runesImg";
+import { getRuneImg, getStyleName, statsModImgs } from "./runesImg";
 
 import runeFrameSVG from "../assets/runes-frame.svg";
 
@@ -13,34 +8,13 @@ import statsModsSVG from "../assets/stats-mods.svg";
 
 import "../styles/ChampRunes.css";
 
-function ChampRunes(props) {
-  let runesMW = initializeRunesTree(props.runes["mostWinrate"][0]);
-  let runesMP = initializeRunesTree(props.runes["mostPlayed"][0]);
+function ChampRunes({ runes, statsMods, displayPickRate }) {
+  let runesMW = initializeRunesTree(runes["mostWinrate"]);
+  let runesMP = initializeRunesTree(runes["mostPlayed"]);
 
-  let statsModsMW = initializeTree(
-    props.statsMods["mostWinrate"][0],
-    "statsMods",
-    3,
-    statsModImgs,
-    true
-  );
-  let statsModsMP = initializeTree(
-    props.statsMods["mostPlayed"][0],
-    "statsMods",
-    3,
-    statsModImgs,
-    true
-  );
+  let statsModsTree = initializeStatsModsTree(statsMods);
 
-  let runesTree, statsModsTree = null;
-
-  if(props.displayPickRate){
-    runesTree = runesMP;
-    statsModsTree = statsModsMP;
-  } else{
-    runesTree = runesMW;
-    statsModsTree = statsModsMW;
-  }
+  let runesTree = displayPickRate ? runesMP : runesMW;
 
   return (
     <>
@@ -113,9 +87,9 @@ function ChampRunes(props) {
               <div id="stats-mods-container">
                 <img id="stats-mods-svg" src={statsModsSVG} alt="" />
 
-                <img src={statsModsTree["statsMods"][0]["img"]} alt="SLT" />
-                <img src={statsModsTree["statsMods"][1]["img"]} alt="SLT" />
-                <img src={statsModsTree["statsMods"][2]["img"]} alt="SLT" />
+                <img src={statsModsTree["mods"][0]["img"]} alt="SLT" />
+                <img src={statsModsTree["mods"][1]["img"]} alt="SLT" />
+                <img src={statsModsTree["mods"][2]["img"]} alt="SLT" />
               </div>
             </div>
           </div>
@@ -126,38 +100,50 @@ function ChampRunes(props) {
 }
 
 function initializeRunesTree(runesTree) {
-  let rate = undefined;
-
-  if ("winRate" in runesTree) {
-    rate = runesTree["winRate"];
-  } else {
-    rate = runesTree["playRate"];
-  }
+  const { primaryId, subId, perkId } = runesTree.styles;
+  const [rune1, rune2, rune3] = runesTree.primary.runesIds;
+  const [rune4, rune5] = runesTree.secondary.runesIds;
 
   return {
     primaryStyle: {
-      id: runesTree["runes"][0],
-      img: getRuneImg(runesTree["runes"][0]),
-      name: getStyleName(runesTree["runes"][0]),
+      id: primaryId,
+      img: getRuneImg(primaryId),
+      name: getStyleName(primaryId),
       runes: [
-        { id: runesTree["runes"][2], img: getRuneImg(runesTree["runes"][2]) },
-        { id: runesTree["runes"][3], img: getRuneImg(runesTree["runes"][3]) },
-        { id: runesTree["runes"][4], img: getRuneImg(runesTree["runes"][4]) },
-        { id: runesTree["runes"][5], img: getRuneImg(runesTree["runes"][5]) },
+        { id: perkId, img: getRuneImg(perkId) },
+        { id: rune1, img: getRuneImg(rune1) },
+        { id: rune2, img: getRuneImg(rune2) },
+        { id: rune3, img: getRuneImg(rune3) },
       ],
     },
     subStyle: {
-      id: runesTree["runes"][1],
-      img: getRuneImg(runesTree["runes"][1]),
-      name: getStyleName(runesTree["runes"][1]),
+      id: subId,
+      img: getRuneImg(subId),
+      name: getStyleName(subId),
       runes: [
-        { id: runesTree["runes"][6], img: getRuneImg(runesTree["runes"][6]) },
-        { id: runesTree["runes"][7], img: getRuneImg(runesTree["runes"][7]) },
+        { id: rune4, img: getRuneImg(rune4) },
+        { id: rune5, img: getRuneImg(rune5) },
       ],
     },
-    played: runesTree["played"],
-    rate: rate,
   };
 }
 
+function initializeStatsModsTree(statsMods) {
+  let statsModsArr = [];
+
+  const { played, playrate, mods } = statsMods;
+
+  mods.forEach((id) => {
+    statsModsArr.push({
+      id: id,
+      img: statsModImgs[id],
+    });
+  });
+
+  return {
+    mods: statsModsArr,
+    played,
+    rate: playrate,
+  };
+}
 export default ChampRunes;

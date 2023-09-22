@@ -30,70 +30,66 @@ function ChampItems({ starting, completed, displayPickRate }) {
     },
   };
 
-  console.debug(nthItems);
-
   const keyType = displayPickRate ? "MP" : "MW";
 
   return (
-    <>
-      <div id="items-frame">
-        <span id="items-set-title">Item Set</span>
-        <div id="all-items-and-svgs-container">
-          <img id="items-frame-img" src={itemSetFrameSVG} />
-          <img id="items-design-img" src={itemSetDesignSVG} />
-          <div id="all-items-container">
-            <div id="starting-items">
-              <span className="items-title">Starting Items</span>
-              <div className="items-display-area">
-                {getMultipleItemsContainer(startItems[keyType], "startItems")}
+    <div id="items-frame">
+      <span id="items-set-title">Item Set</span>
+      <div id="all-items-and-svgs-container">
+        <img id="items-frame-img" src={itemSetFrameSVG} />
+        <img id="items-design-img" src={itemSetDesignSVG} />
+        <div id="all-items-container">
+          <div id="starting-items">
+            <span className="items-title">Starting Items</span>
+            <div className="items-display-area">
+              {getMultipleItemsContainer(startItems[keyType], "startItems")}
+            </div>
+          </div>
+
+          <div id="core-items">
+            <span className="items-title">Core Items</span>
+            <div className="items-display-area">
+              {getMultipleItemsContainer(coreItems[keyType], "coreItems")}
+            </div>
+          </div>
+
+          <div id="fourth-fifth-items-container">
+            <div>
+              <span className="items-title">4th Item</span>
+              {displayPickRate
+                ? getPickRateContainerForNthItems(nthItems[4][keyType])
+                : null}
+              <div className="fourth-fifth-items-display-container">
+                {getSingleItemContainer(nthItems[4][keyType])}
               </div>
             </div>
 
-            <div id="core-items">
-              <span className="items-title">Core Items</span>
-              <div className="items-display-area">
-                {getMultipleItemsContainer(coreItems[keyType], "coreItems")}
+            <div>
+              <span className="items-title">5th Item </span>
+              {displayPickRate
+                ? getPickRateContainerForNthItems(nthItems[5]?.[keyType])
+                : null}
+              <div className="fourth-fifth-items-display-container">
+                {getSingleItemContainer(nthItems[5]?.[keyType])}
               </div>
             </div>
+          </div>
 
-            <div id="fourth-fifth-items-container">
-              <div>
-                <span className="items-title">4th Item</span>
-                {displayPickRate
-                  ? getPickRateContainerForNthItems(nthItems[4][keyType])
-                  : null}
-                <div className="fourth-fifth-items-display-container">
-                  {getSingleItemContainer(nthItems[4][keyType])}
-                </div>
-              </div>
+          <div id="sixth-items">
+            <span className="items-title">
+              Last Item{" "}
+              {displayPickRate
+                ? getPickRateContainerForNthItems(nthItems[6]?.[keyType])
+                : null}
+            </span>
 
-              <div>
-                <span className="items-title">5th Item </span>
-                {displayPickRate
-                  ? getPickRateContainerForNthItems(nthItems[5]?.[keyType])
-                  : null}
-                <div className="fourth-fifth-items-display-container">
-                  {getSingleItemContainer(nthItems[5]?.[keyType])}
-                </div>
-              </div>
-            </div>
-
-            <div id="sixth-items">
-              <span className="items-title">
-                Last Item{" "}
-                {displayPickRate
-                  ? getPickRateContainerForNthItems(nthItems[6]?.[keyType])
-                  : null}
-              </span>
-
-              <div id="sixth-items-display-container">
-                {getSingleItemContainer(nthItems[6]?.[keyType])}
-              </div>
+            <div id="sixth-items-display-container">
+              {getSingleItemContainer(nthItems[6]?.[keyType])}
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
@@ -103,6 +99,8 @@ function initializeItems(arr, isMostPlayed = true) {
   let arrayType = [];
 
   arr.items.forEach((item, i) => {
+    if (!item) return;
+
     arrayType[i] = {
       id: item,
       img: getItemImg(item),
@@ -117,11 +115,12 @@ function initializeItems(arr, isMostPlayed = true) {
 }
 
 function initializeNthItems(arr, isMostPlayed = true) {
-  const rate = isMostPlayed ? arr.playrate : arr.winrate;
+  const rate = isMostPlayed ? "playrate" : "winrate";
 
-  let arrayType = [];
+  const arrayType = [];
 
   arr.forEach((item, i) => {
+    if (!item) return;
     arrayType[i] = {
       id: item.itemId,
       img: getItemImg(item.itemId),
@@ -129,12 +128,26 @@ function initializeNthItems(arr, isMostPlayed = true) {
       rate: item[rate],
     };
   });
+  console.debug(arrayType);
 
-  return arrayType;
+  const arrSorted = isMostPlayed
+    ? getSorted(arrayType).byMostPlayed()
+    : getSorted(arrayType).byMostWinrate();
+
+  return arrSorted.slice(0, 3);
+}
+
+function getSorted(arr) {
+  const sortBy = (key) => arr.sort((a, b) => b[key] - a[key]);
+
+  return {
+    byMostPlayed: () => sortBy("played"),
+    byMostWinrate: () => sortBy("winrate"),
+  };
 }
 
 function getSingleItemContainer(itemsArray, displayPickRate) {
-  if (itemsArray[0]["id"] === 7050) {
+  if (!itemsArray || itemsArray.length === 0) {
     return getEmptyItemsContainer();
   }
 
@@ -142,15 +155,13 @@ function getSingleItemContainer(itemsArray, displayPickRate) {
 
   itemsArray.forEach((item) => {
     itemContainer.push(
-      <>
-        <div className="single-item-container">
-          <img className="items-img" src={item["img"]} />
-          <div className="single-item-container-rate">
-            <span>{item["rate"]}%</span>
-            {displayPickRate ? null : <span>{item["played"]} games</span>}
-          </div>
+      <div className="single-item-container">
+        <img className="items-img" src={item["img"]} />
+        <div className="single-item-container-rate">
+          <span>{item["rate"]}%</span>
+          {displayPickRate ? null : <span>{item["played"]} games</span>}
         </div>
-      </>
+      </div>
     );
   });
 
@@ -158,16 +169,14 @@ function getSingleItemContainer(itemsArray, displayPickRate) {
 }
 
 function getPickRateContainerForNthItems(nthItems) {
-  if (!nthItems) {
-    return null;
-  }
+  if (!nthItems) return null;
+
+  const played = nthItems.reduce((acc, curr) => acc + curr.played, 0);
 
   return (
-    <>
-      <span className="nth-items-container" style={{ paddingLeft: "0.4rem" }}>
-        ({nthItems.played} games)
-      </span>
-    </>
+    <span className="nth-items-container" style={{ paddingLeft: "0.4rem" }}>
+      ({played} games)
+    </span>
   );
 }
 
@@ -192,30 +201,24 @@ function getMultipleItemsContainer(itemsArray) {
     if (duplicateIds[item["id"]] !== 0) {
       let duplicateItemsContainer =
         duplicateIds[item["id"]] > 1 ? (
-          <>
-            <span className="duplicate-items">x{duplicateIds[item["id"]]}</span>
-          </>
+          <span className="duplicate-items">x{duplicateIds[item["id"]]}</span>
         ) : null;
 
       itemContainer.push(
-        <>
-          <div style={{ position: "relative" }}>
-            <img className="items-img" src={item["img"]} />
-            {duplicateItemsContainer}
-          </div>
-        </>
+        <div style={{ position: "relative" }}>
+          <img className="items-img" src={item["img"]} />
+          {duplicateItemsContainer}
+        </div>
       );
       duplicateIds[item["id"]] = 0;
     }
   });
 
   itemContainer.push(
-    <>
-      <div className="single-item-container-rate">
-        <span>{itemsArray["rate"]}%</span>
-        <span>{itemsArray["played"]} games</span>
-      </div>
-    </>
+    <div className="single-item-container-rate">
+      <span>{itemsArray["rate"]}%</span>
+      <span>{itemsArray["played"]} games</span>
+    </div>
   );
 
   return itemContainer;

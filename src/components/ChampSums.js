@@ -1,26 +1,16 @@
-import { getSummonerImg, initializeTree } from "./runesImg";
+import { getSummonerImg } from "./runesImg";
 
 import sumsFrameSVG from "../assets/sums-frame.svg";
 import sumsDesignSVG from "../assets/sums-design.svg";
 
 import "../styles/ChampSums.css";
 
-function ChampSums(props) {
-  let summonersMP = initializeTree(
-    props.summoners["mostPlayed"][0],
-    "summoners",
-    2,
-    getSummonerImg
-  );
-  
-  let summonersMW = initializeTree(
-    props.summoners["mostWinrate"][0],
-    "summoners",
-    2,
-    getSummonerImg
-  );
+function ChampSums({ summoners, displayPickRate }) {
+  let summonersMP = initializeTree(summoners.mostPlayed);
 
-  let summonersRate = props.displayPickRate ? summonersMP : summonersMW;
+  let summonersMW = initializeTree(summoners.mostWinrate, false);
+
+  let summonersRate = displayPickRate ? summonersMP : summonersMW;
 
   return (
     <div id="sums-frame">
@@ -39,6 +29,25 @@ function ChampSums(props) {
       </div>
     </div>
   );
+}
+
+function initializeTree(arr, isMostPlayed = true) {
+  const rate = isMostPlayed ? arr.playrate : arr.winrate;
+
+  let arrSorted = [];
+
+  arr.sums.forEach((sum) => {
+    arrSorted.push({
+      id: sum,
+      img: getSummonerImg(sum),
+    });
+  });
+
+  return {
+    summoners: arrSorted,
+    played: arr.played,
+    rate,
+  };
 }
 
 export default ChampSums;

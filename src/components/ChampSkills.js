@@ -76,8 +76,8 @@ function ChampSkills({ evolves, champName, skills, displayPickrate }) {
     return container;
   };
 
-  const checkEvolvePriority = (skillPriority) => {
-    if (skillPriority.length === 0) {
+  const checkEvolvePriority = (evolvePriority) => {
+    if (!evolvePriority) {
       return (
         <span style={{ flex: "1", fontStyle: "italic", margin: "1rem" }}>
           This champ has no evolution

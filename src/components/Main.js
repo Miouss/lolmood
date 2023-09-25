@@ -25,13 +25,7 @@ function Main(props) {
       />
       <Route
         path="/games/:region/:summonerName"
-        element={
-          <SummonerStats
-            data={props.data}
-            lang={props.lang}
-            setData={props.setData}
-          />
-        }
+        element={<SummonerStats {...props} />}
       />
       <Route path="/champ/:champName" element={<ChampStats />} />
     </Routes>

@@ -4,10 +4,10 @@ import StatsByChampCard from "./StatsByChampCard";
 
 import "../styles/StatsByChamp.css";
 
-function StatsByChamp(props) {
+function StatsByChamp({ topChampsByMostPlayed }) {
   let StatsByChampCards = [];
 
-  props.data.forEach((element) => {
+  topChampsByMostPlayed.forEach((element) => {
     StatsByChampCards.push(<StatsByChampCard key={element} data={element} />);
   });
 

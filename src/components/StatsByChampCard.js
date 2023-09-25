@@ -4,18 +4,10 @@ import "../styles/StatsByChampCard.css";
 
 import "react-circular-progressbar/dist/styles.css";
 
-function StatsByChampCard(props) {
-  const champName = props.data[0];
-  const champImg = require("../assets/loldata/img/champion/centered/" +
-    champName +
-    "_0.jpg");
-  const played = props.data[1]["played"];
+function StatsByChampCard({ data: { 0: champName, 1: champData } }) {
+  const champImg = require(`../assets/loldata/img/champion/centered/${champName}_0.jpg`);
 
-  const winrate = props.data[1]["winrate"];
-
-  const averageKills = props.data[1]["averageKills"];
-  const averageDeaths = props.data[1]["averageDeaths"];
-  const averageAssists = props.data[1]["averageAssists"];
+  const { played, winrate, killsAvg, deathsAvg, assistsAvg } = champData;
 
   return (
     <>
@@ -34,7 +26,7 @@ function StatsByChampCard(props) {
             <span>{played}</span>
             <span>{winrate} %</span>
             <span>
-              {averageKills}/{averageDeaths}/{averageAssists}
+              {killsAvg}/{deathsAvg}/{assistsAvg}
             </span>
           </div>
         </div>

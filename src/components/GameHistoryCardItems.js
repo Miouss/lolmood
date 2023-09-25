@@ -8,77 +8,64 @@ import { getItemImg } from "./runesImg";
 
 import "../styles/GameHistoryCardItems.css";
 
-function GameHistoryCardItems(props) {
-  let itemsIconsFirstRow = new Array(3);
-  let itemsIconsSecondRow = new Array(3);
+function GameHistoryCardItems({ idItems, identifier, lang }) {
+  const itemsIconsFirstRow = [];
+  const itemsIconsSecondRow = [];
 
-  for (let i = 0; i < props.idItems.length; i++) {
+  for (let i = 0; i < idItems.length; i++) {
     if (i < 3) {
-      itemsIconsFirstRow[i] = getItemImg(props.idItems[i]);
+      itemsIconsFirstRow[i] = getItemImg(idItems[i]);
     } else {
-      itemsIconsSecondRow[i - 3] = getItemImg(props.idItems[i]);
+      itemsIconsSecondRow[i - 3] = getItemImg(idItems[i]);
     }
   }
 
-  let itemsJSON = props.lang === "fr" ? frItemsJSON : enItemsJSON;
+  const itemsJSON = lang === "fr" ? frItemsJSON : enItemsJSON;
 
   return (
     <>
       <div className="game-history-card-items">
         <div>
-          {itemsIconsFirstRow.map((itemIcon, index) => {
-            if (props.idItems[index] === undefined) {
-              return (
-                <div
-                  key={`${props.idItems[index]}${props.identifier}`}
-                  className="empty-item"
-                ></div>
-              );
-            } else {
-              return (
-                <GameHistoryCardTooltip
-                  key={`${index}${props.identifier}`}
-                  type="items"
-                  itemsJSON={itemsJSON}
-                  idItems={props.idItems}
-                  itemIcon={itemIcon}
-                  identifier={props.identifier}
-                  index={index}
-                  lang={props.lang}
-                />
-              );
-            }
+          {itemsIconsFirstRow.map((itemIcon, i) => {
+            return idItems[i] ? (
+              <GameHistoryCardTooltip
+                key={`${i}${identifier}`}
+                type="items"
+                itemsJSON={itemsJSON}
+                idItems={idItems}
+                itemIcon={itemIcon}
+                identifier={identifier}
+                index={i}
+                lang={lang}
+              />
+            ) : (
+              <EmptyItem key={`${i}${identifier}`} />
+            );
           })}
         </div>
         <div>
-          {itemsIconsSecondRow.map((itemIcon, i) => {
-            let index = i + 3;
-
-            if (props.idItems[index] === undefined) {
-              return (
-                <div
-                  key={`${index}${props.identifier}`}
-                  className="empty-item"
-                ></div>
-              );
-            } else {
-              return (
-                <GameHistoryCardTooltip
-                  key={`${index}${props.identifier}`}
-                  type="items"
-                  itemsJSON={itemsJSON}
-                  idItems={props.idItems}
-                  itemIcon={itemIcon}
-                  identifier={props.identifier}
-                  index={index}
-                />
-              );
-            }
-          })}
+          {itemsIconsSecondRow.map((itemIcon, i) =>
+            idItems[i + 3] ? (
+              <GameHistoryCardTooltip
+                key={`${i}${identifier}`}
+                type="items"
+                itemsJSON={itemsJSON}
+                idItems={idItems}
+                itemIcon={itemIcon}
+                identifier={identifier}
+                index={i}
+              />
+            ) : (
+              <EmptyItem key={`${i}${identifier}`} />
+            )
+          )}
         </div>
       </div>
     </>
   );
 }
 
+function EmptyItem({ key }) {
+  return <div key={key} className="empty-item"></div>;
+}
 export default GameHistoryCardItems;

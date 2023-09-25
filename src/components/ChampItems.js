@@ -128,7 +128,6 @@ function initializeNthItems(arr, isMostPlayed = true) {
       rate: item[rate],
     };
   });
-  console.debug(arrayType);
 
   const arrSorted = isMostPlayed
     ? getSorted(arrayType).byMostPlayed()

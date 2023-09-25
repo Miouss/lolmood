@@ -26,16 +26,6 @@
   width: 2rem;
 }
 
-.empty-item::before {
-  content: "\2573";
-  color: darkgray;
-  position: relative;
-  display: block;
-  top: -1rem;
-  left: -0.3rem;
-  font-size: 2.2rem;
-}
-
 /* CSS REACTOOLTIPS */
 
 .tooltip-container {

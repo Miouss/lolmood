@@ -96,8 +96,14 @@ function setPerkToolTip(runeJSON, idPerk, perkIcon) {
   );
 }
 
-function setItemsToolTip(itemsJSON, idItems, itemIcon, identifier, index, lang) {
-  
+function setItemsToolTip(
+  itemsJSON,
+  idItems,
+  itemIcon,
+  identifier,
+  index,
+  lang
+) {
   return (
     <article data-tip data-for={`${identifier}${index}`}>
       <ReactTooltip
@@ -108,19 +114,19 @@ function setItemsToolTip(itemsJSON, idItems, itemIcon, identifier, index, lang) 
       >
         <div className="tooltip-title">
           <img src={itemIcon} alt={`item${index}`} />
-          <h6>{itemsJSON["data"][idItems[index]]["name"]}</h6>
+          <h6>{itemsJSON.data[idItems[index]]["name"]}</h6>
         </div>
         <div
           dangerouslySetInnerHTML={{
-            __html: itemsJSON["data"][idItems[index]]["description"],
+            __html: itemsJSON.data[idItems[index]]["description"],
           }}
           style={{
             position: "relative",
             "& attention:before": {
               content: '"+"',
               position: "absolute",
-              left: 0
-            }
+              left: 0,
+            },
           }}
         ></div>
       </ReactTooltip>

@@ -5,21 +5,13 @@ import PageSelector from "./GameHistoryPageSelector";
 
 import "../styles/GameHistory.css";
 
-function GameHistory(props) {
+function GameHistory({ data, lang }) {
   let GameHistoryCards = [];
-  let key = 0;
 
-  props.data.forEach((element) => {
+  data.forEach((match, i) => {
     GameHistoryCards.push(
-      <GameHistoryCard
-        key={key}
-        data={element}
-        lang={props.lang}
-        setGoToChampPage={props.setGoToChampPage}
-      />
+      <GameHistoryCard key={i} match={match} lang={lang} />
     );
-
-    key -= 1;
   });
 
   let [bgColorPageSelector, setBgColorPageSelector] = useState(() => {
@@ -70,7 +62,7 @@ function GameHistory(props) {
   useEffect(() => {
     handleSwitchPage(0, previousIndex);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.data]);
+  }, [data]);
 
   return (
     <>

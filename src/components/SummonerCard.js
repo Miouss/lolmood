@@ -4,14 +4,12 @@ import frameSVG from "../assets/summoner-details-frame.svg";
 
 import "../styles/SummonerCard.css";
 
-function SummonerCard(props) {
-  let name = props.data["name"];
-  let rankIcon = getEmblemeImg(props.data["rank"]);
+function SummonerCard({ name, grade, lp, games, wins, tier }) {
+  const rankIcon = getEmblemeImg(grade);
 
-  let rank = props.data["rank"] + " " + props.data["tier"];
-  let lp = props.data["lp"];
-  let games = props.data["games"];
-  let winrate = ((props.data["wins"] / games) * 100).toFixed(2);
+  const rank = `${grade} ${tier}`;
+
+  const winrate = ((wins / games) * 100).toFixed(2);
 
   return (
     <>

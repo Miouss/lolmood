@@ -8,47 +8,49 @@ import { getSummonerImg } from "./runesImg";
 
 import "../styles/GameHistoryCard.css";
 
-function GameHistoryCard(props) {
-  let [colorOpacity, setColorOpacity] = useState(1);
+function GameHistoryCard({
+  lang,
+  match: {
+    matchId,
+    items,
+    runes,
+    statsMods,
+    primaryStyleId,
+    subStyleId,
+    perkId,
+    champName,
+    lane,
+    kills,
+    deaths,
+    assists,
+    summoners,
+    win,
+  },
+}) {
+  const [colorOpacity, setColorOpacity] = useState(1);
 
   const nav = useNavigate();
 
-  const champName = props.data["name"];
-  let lane = props.data["lane"].toLowerCase();
-
-  const kills = props.data["kills"];
-  const deaths = props.data["deaths"];
-  const assists = props.data["assists"];
-
-  if (props.data["duration"] < 300) {
-    lane = "remake";
-  }
-
-  const champImg = require("../assets/loldata/img/champion/centered/" +
-    champName +
-    "_0.jpg");
-  const laneImg = require("../assets/loldata/current/img/position/" +
-    lane +
-    ".png");
+  const champImg = require(`../assets/loldata/img/champion/centered/${champName}_0.jpg`);
+  const laneImg = require(`../assets/loldata/current/img/position/${lane.toLowerCase()}.png`);
 
   const summonerImg = [
-    getSummonerImg(props.data["summoner1"]),
-    getSummonerImg(props.data["summoner2"]),
+    getSummonerImg(summoners[0]),
+    getSummonerImg(summoners[1]),
   ];
 
-  let color =
-    props.data["win"] === 1
-      ? "rgba(32, 140, 209, " + colorOpacity + ")"
-      : "rgba(189, 37, 124, " + colorOpacity + ")";
+  const getRGB = (win) => (win ? "32, 140, 209" : "189, 37, 124");
+
+  const color = `rgba(${getRGB(win)}, ${colorOpacity})`;
 
   return (
     <>
       <div
         onMouseEnter={() => setColorOpacity(0.5)}
         onMouseLeave={() => setColorOpacity(1)}
-        onClick={() => nav("/champ/" + champName, {state:{champName:champName}})}
+        onClick={() => nav("/champ/" + champName, { state: { champName } })}
         className="game-history-card"
-        style={{ border: "solid 1px " + color }}
+        style={{ border: `solid 1px ${color}` }}
       >
         <div className="game-history-card-champ-lane">
           <div className="champ-container">
@@ -65,18 +67,18 @@ function GameHistoryCard(props) {
         </div>
 
         <GameHistoryCardStyles
-          idRunes={props.data["runes"]}
-          idStatsMods={props.data["statsMods"]}
-          idPrimaryStyle={props.data["primaryStyle"]}
-          idSubStyle={props.data["subStyle"]}
-          idPerk={props.data["perk"]}
-          identifier={props.data["identifier"]}
-          lang={props.lang}
+          idRunes={runes}
+          idStatsMods={statsMods}
+          idPrimaryStyle={primaryStyleId}
+          idSubStyle={subStyleId}
+          idPerk={perkId}
+          identifier={matchId}
+          lang={lang}
         />
         <GameHistoryCardItems
-          idItems={props.data["items"]}
-          identifier={props.data["identifier"]}
-          lang={props.lang}
+          idItems={items}
+          identifier={matchId}
+          lang={lang}
         />
 
         <div

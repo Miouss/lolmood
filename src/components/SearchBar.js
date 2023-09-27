@@ -11,7 +11,7 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 function SearchBar(props) {
-  const [regionSelected, setRegionSelected] = useState(undefined);
+  const regionSelectedRef = useRef();
   const countInputRef = useRef();
   const summonerInputRef = useRef();
 
@@ -28,7 +28,7 @@ function SearchBar(props) {
 
   const navigate = useNavigate();
 
-  async function requestData(summonerName, count) {
+  async function requestData(summonerName, regionSelected, count) {
     const data = await fetchGamesData(summonerName, regionSelected, count);
 
     setSearchIcon(faMagnifyingGlass);
@@ -43,6 +43,7 @@ function SearchBar(props) {
 
     const summonerName = summonerInputRef.current.value;
     const count = parseInt(countInputRef.current.value);
+    const regionSelected = regionSelectedRef.current.value;
 
     if (regionSelected === undefined) {
       alert("You have to select a region first");
@@ -52,7 +53,7 @@ function SearchBar(props) {
       alert("You have to enter a number of history game between 1 - 49");
     } else {
       setSearchIcon(faSpinner);
-      requestData(summonerName, count);
+      requestData(summonerName, regionSelected, count);
     }
   };
 
@@ -93,10 +94,11 @@ function SearchBar(props) {
           <label onClick={handleOnClickRegion} htmlFor="region-select">
             Region
           </label>
+
           <select
+            ref={regionSelectedRef}
             hidden={isRegionSelectHidden}
             id="region-select"
-            onChange={(e) => setRegionSelected(e.target.value)}
           >
             <SearchOption
               regions={[

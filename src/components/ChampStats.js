@@ -11,6 +11,8 @@ import Skills from "./ChampSkills";
 
 import backButtonSVG from "../assets/back_button.svg";
 
+import { API_HOST } from "../config";
+
 import "../styles/ChampStats.css";
 
 function ChampStats(props) {
@@ -24,7 +26,7 @@ function ChampStats(props) {
   champName = champName.charAt(0).toUpperCase() + champName.slice(1);
 
   async function fetchChampStats() {
-    const url = "http://localhost:3000/api/champ/" + champName;
+    const url = `http://${API_HOST}/champ/${champName}`;
 
     const res = await fetch(url);
 

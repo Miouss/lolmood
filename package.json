@@ -1,7 +1,7 @@
 {
   "name": "lol-mood",
   "version": "0.1.0",
-  "homepage" : "./",
+  "homepage": "./",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
@@ -26,7 +26,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "dockbuild": "docker build -t ghcr.io/miouss/lolmood-frontend .",
+    "dockpush": "docker push ghcr.io/miouss/lolmood-frontend"
   },
   "eslintConfig": {
     "extends": [

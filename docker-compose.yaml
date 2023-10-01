@@ -1,0 +1,8 @@
+version: "3.8"
+services:
+  web:
+    build: .
+    image: lolmood_web
+    container_name: lolmood_web
+    ports:
+      - "80:80"

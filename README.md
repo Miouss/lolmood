@@ -1,4 +1,4 @@
-# Video demonstration : https://youtu.be/mWt7DmbZ8_o
+# [Video demonstration](https://youtu.be/mWt7DmbZ8_o) 
 
 ## api's repo is [here](https://github.com/Miouss/lol-mood-api)
 

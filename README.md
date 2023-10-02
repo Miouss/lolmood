@@ -3,3 +3,6 @@
 The api's repo (node js) is [here](https://github.com/Miouss/lol-mood-api)
 
 the old version of this frontend that was using my php backend is [here](https://github.com/Miouss/lolmood-old-version)
+
+# Test the website
+You can test the website by selecting EUW as region and entering "SLY Wakz" in the summoner search area

@@ -1,0 +1,6 @@
+FROM node:18.17.1-alpine as build
+WORKDIR /lolmood/web
+COPY package*.json ./
+RUN yarn install
+COPY . .
+CMD ["yarn", "start"]

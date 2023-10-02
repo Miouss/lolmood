@@ -26,7 +26,7 @@ function ChampStats(props) {
   champName = champName.charAt(0).toUpperCase() + champName.slice(1);
 
   async function fetchChampStats() {
-    const url = `http://${API_HOST}/champ/${champName}`;
+    const url = `${API_HOST}/champ/${champName}`;
 
     const res = await fetch(url);
 

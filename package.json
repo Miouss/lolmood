@@ -27,8 +27,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "dockbuild": "docker build -t ghcr.io/miouss/lolmood-frontend .",
-    "dockpush": "docker push ghcr.io/miouss/lolmood-frontend"
+    "dockdev": "docker compose -f docker-compose-dev.yaml up",
+    "dockbuild": "docker build -t ghcr.io/miouss/lolmood-frontend . -f Dockerfile.prod",
+    "dockpush": "docker push ghcr.io/miouss/lolmood-frontend:latest"
   },
   "eslintConfig": {
     "extends": [

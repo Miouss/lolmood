@@ -1,0 +1,10 @@
+FROM node:18.17.1-alpine as build
+WORKDIR /lolmood/web
+COPY package*.json ./
+RUN yarn install
+COPY . .
+RUN yarn build
+
+FROM nginx:stable-alpine
+COPY --from=build /lolmood/web/build /usr/share/nginx/html
+CMD ["nginx", "-g", "daemon off;"]

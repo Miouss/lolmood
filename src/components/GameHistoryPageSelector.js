@@ -1,13 +1,16 @@
 import PageSelectorSVG from "../assets/page-selector.svg";
 
-function PageSelector(props) {
+function PageSelector({
+  handleSwitchPage,
+  pageIndex,
+  previousPageIndex,
+  bgColor,
+}) {
   return (
     <img
       className="page-selector"
-      onClick={() =>
-        props.handleSwitchPage(props.indexButton, props.previousIndex)
-      }
-      style={{ backgroundColor: props.bgColorPageSelector[props.indexButton] }}
+      onClick={() => handleSwitchPage(pageIndex, previousPageIndex)}
+      style={{ backgroundColor: bgColor }}
       src={PageSelectorSVG}
       alt="page-selector-button"
     />

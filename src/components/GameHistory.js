@@ -6,7 +6,7 @@ import PageSelector from "./GameHistoryPageSelector";
 import "../styles/GameHistory.css";
 
 function GameHistory({ data, lang }) {
-  let GameHistoryCards = [];
+  const GameHistoryCards = [];
 
   data.forEach((match, i) => {
     GameHistoryCards.push(
@@ -14,66 +14,71 @@ function GameHistory({ data, lang }) {
     );
   });
 
-  let [bgColorPageSelector, setBgColorPageSelector] = useState(() => {
-    let array = ["black"];
+  const pageLength = GameHistoryCards.length / 5;
 
-    for (let i = 1; i < GameHistoryCards.length / 5; i++) {
-      array.push(["inherit"]);
-    }
+  const [bgColorPageSelector, setBgColorPageSelector] = useState(() => {
+    const array = ["black"];
+
+    [...Array(pageLength)].forEach(() => array.push(["inherit"]));
 
     return array;
   });
 
-  let [previousIndex, setPreviousIndex] = useState(0);
+  const [previousPageIndex, setPreviousPageIndex] = useState(0);
 
-  let [arrayIndex, setArrayIndex] = useState(0);
+  const [cardIndex, setCardIndex] = useState(0);
 
-  function handleSwitchPage(buttonIndex, previousIndex) {
-    setArrayIndex(buttonIndex * 5);
+  const handleSwitchPage = (pageIndex, previousIndex) => {
+    setCardIndex(pageIndex * 5);
 
-    if (buttonIndex !== previousIndex) {
-      let oldArray = bgColorPageSelector;
+    if (pageIndex !== previousIndex) {
+      setBgColorPageSelector((oldArray) => {
+        oldArray[previousIndex] = "inherit";
+        oldArray[pageIndex] = "black";
 
-      oldArray[previousIndex] = "inherit";
-      oldArray[buttonIndex] = "black";
-      setBgColorPageSelector(oldArray);
-      setPreviousIndex(buttonIndex);
+        return oldArray;
+      });
+      setPreviousPageIndex(pageIndex);
     }
-  }
+  };
 
-  function displayPageSelector() {
-    let pageSelectorArray = [];
+  const displayPageSelector = () => {
+    const pageSelectorArray = [];
 
-    for (let i = 0; i < GameHistoryCards.length / 5; i++) {
+    [...Array(pageLength)].forEach((_, i) => {
       pageSelectorArray.push(
         <PageSelector
           key={i}
           handleSwitchPage={handleSwitchPage}
-          bgColorPageSelector={bgColorPageSelector}
-          previousIndex={previousIndex}
-          indexButton={i}
+          bgColor={bgColorPageSelector[i]}
+          previousPageIndex={previousPageIndex}
+          pageIndex={i}
         />
       );
-    }
+    });
 
     return pageSelectorArray;
-  }
+  };
+
+  const displayGameHistoryCards = () => {
+    const gameHistoryCardsArray = [];
+
+    [...Array(5)].forEach((_, i) => {
+      gameHistoryCardsArray.push(GameHistoryCards[cardIndex + i]);
+    });
+
+    return gameHistoryCardsArray;
+  };
 
   useEffect(() => {
-    handleSwitchPage(0, previousIndex);
+    handleSwitchPage(0, previousPageIndex);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   return (
     <>
       <div className="game-history-page-container">
-        <div className="game-history">
-          {GameHistoryCards[arrayIndex]}
-          {GameHistoryCards[arrayIndex + 1]}
-          {GameHistoryCards[arrayIndex + 2]}
-          {GameHistoryCards[arrayIndex + 3]}
-          {GameHistoryCards[arrayIndex + 4]}
-        </div>
+        <div className="game-history">{displayGameHistoryCards()}</div>
         <div className="game-page">{displayPageSelector()}</div>
       </div>
     </>

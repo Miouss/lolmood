@@ -65,7 +65,7 @@ function GameHistoryCardItems({ idItems, identifier, lang }) {
   );
 }
 
-function EmptyItem({ key }) {
-  return <div key={key} className="empty-item"></div>;
+function EmptyItem() {
+  return <div className="empty-item"></div>;
 }
 export default GameHistoryCardItems;

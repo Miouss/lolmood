@@ -6,11 +6,11 @@ import sumsDesignSVG from "../assets/sums-design.svg";
 import "../styles/ChampSums.css";
 
 function ChampSums({ summoners, displayPickRate }) {
-  let summonersMP = initializeTree(summoners.mostPlayed);
+  const summonersMP = initializeTree(summoners.mostPlayed);
 
-  let summonersMW = initializeTree(summoners.mostWinrate, false);
+  const summonersMW = initializeTree(summoners.mostWinrate, false);
 
-  let summonersRate = displayPickRate ? summonersMP : summonersMW;
+  const summonersRate = displayPickRate ? summonersMP : summonersMW;
 
   return (
     <div id="sums-frame">
@@ -34,7 +34,7 @@ function ChampSums({ summoners, displayPickRate }) {
 function initializeTree(arr, isMostPlayed = true) {
   const rate = isMostPlayed ? arr.playrate : arr.winrate;
 
-  let arrSorted = [];
+  const arrSorted = [];
 
   arr.sums.forEach((sum) => {
     arrSorted.push({

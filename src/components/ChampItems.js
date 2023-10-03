@@ -6,16 +6,17 @@ import itemSetDesignSVG from "../assets/items-set-design.svg";
 import "../styles/ChampItems.css";
 
 function ChampItems({ starting, completed, displayPickRate }) {
-  let startItems = {
+  const startItems = {
     MP: initializeItems(starting.mostPlayed),
     MW: initializeItems(starting.mostWinrate, false),
   };
 
-  let coreItems = {
+  const coreItems = {
     MP: initializeItems(completed.core.mostPlayed),
     MW: initializeItems(completed.core.mostWinrate, false),
   };
-  let nthItems = {
+
+  const nthItems = {
     4: {
       MP: initializeNthItems(completed.nth.mostPlayed[0]),
       MW: initializeNthItems(completed.nth.mostWinrate[0], false),
@@ -96,7 +97,7 @@ function ChampItems({ starting, completed, displayPickRate }) {
 function initializeItems(arr, isMostPlayed = true) {
   const rate = isMostPlayed ? arr.playrate : arr.winrate;
 
-  let arrayType = [];
+  const arrayType = [];
 
   arr.items.forEach((item, i) => {
     if (!item) return;
@@ -184,9 +185,9 @@ function getMultipleItemsContainer(itemsArray) {
     return getEmptyItemsContainer();
   }
 
-  let itemContainer = [];
+  const itemContainer = [];
 
-  let duplicateIds = {};
+  const duplicateIds = {};
 
   itemsArray.items.forEach((item) => {
     if (duplicateIds[item["id"]] === undefined) {
@@ -198,7 +199,7 @@ function getMultipleItemsContainer(itemsArray) {
 
   itemsArray.items.forEach((item) => {
     if (duplicateIds[item["id"]] !== 0) {
-      let duplicateItemsContainer =
+      const duplicateItemsContainer =
         duplicateIds[item["id"]] > 1 ? (
           <span className="duplicate-items">x{duplicateIds[item["id"]]}</span>
         ) : null;

@@ -6,12 +6,12 @@ import Main from "./components/Main";
 import Footer from "./components/Footer";
 
 function App() {
-  let [data, setData] = useState(null);
+  const [data, setData] = useState(null);
 
-  let [lang, setLang] = useState("fr");
+  const [lang, setLang] = useState("fr");
 
-  let [frFlagWidth, setFrFlag] = useState("100%");
-  let [enFlagWidth, setEnFlag] = useState("50%");
+  const [frFlagWidth, setFrFlag] = useState("100%");
+  const [enFlagWidth, setEnFlag] = useState("50%");
 
   return (
     <>

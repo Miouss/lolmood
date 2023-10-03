@@ -15,9 +15,9 @@ import { API_HOST } from "../config";
 
 import "../styles/ChampStats.css";
 
-function ChampStats(props) {
-  let [champStats, setChampStats] = useState(undefined);
-  let [displayPickRate, setDisplayPickRate] = useState(true);
+function ChampStats() {
+  const [champStats, setChampStats] = useState(undefined);
+  const [displayPickRate, setDisplayPickRate] = useState(true);
 
   const nav = useNavigate();
   const location = useLocation();
@@ -32,7 +32,6 @@ function ChampStats(props) {
 
     const data = await res.json();
 
-    console.log(data);
     if (typeof data === "string") {
       alert(data);
       nav("/");
@@ -46,7 +45,7 @@ function ChampStats(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (champStats === undefined) return null;
+  if (!champStats) return null;
 
   return (
     <>

@@ -9,12 +9,12 @@ import statsModsSVG from "../assets/stats-mods.svg";
 import "../styles/ChampRunes.css";
 
 function ChampRunes({ runes, statsMods, displayPickRate }) {
-  let runesMW = initializeRunesTree(runes["mostWinrate"]);
-  let runesMP = initializeRunesTree(runes["mostPlayed"]);
+  const runesMW = initializeRunesTree(runes["mostWinrate"]);
+  const runesMP = initializeRunesTree(runes["mostPlayed"]);
 
-  let statsModsTree = initializeStatsModsTree(statsMods);
+  const statsModsTree = initializeStatsModsTree(statsMods);
 
-  let runesTree = displayPickRate ? runesMP : runesMW;
+  const runesTree = displayPickRate ? runesMP : runesMW;
 
   return (
     <>
@@ -129,7 +129,7 @@ function initializeRunesTree(runesTree) {
 }
 
 function initializeStatsModsTree(statsMods) {
-  let statsModsArr = [];
+  const statsModsArr = [];
 
   const { played, playrate, mods } = statsMods;
 

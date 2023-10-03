@@ -5,12 +5,12 @@ import champJSON from "../assets/loldata/current/data/en_US/championFull.json";
 import "../styles/ChampSkills.css";
 
 function ChampSkills({ evolves, champName, skills, displayPickrate }) {
-  let qImg = getSpellImg(champJSON["data"][champName]["spells"][0]["id"]);
-  let wImg = getSpellImg(champJSON["data"][champName]["spells"][1]["id"]);
-  let eImg = getSpellImg(champJSON["data"][champName]["spells"][2]["id"]);
-  let rImg = getSpellImg(champJSON["data"][champName]["spells"][3]["id"]);
+  const qImg = getSpellImg(champJSON["data"][champName]["spells"][0]["id"]);
+  const wImg = getSpellImg(champJSON["data"][champName]["spells"][1]["id"]);
+  const eImg = getSpellImg(champJSON["data"][champName]["spells"][2]["id"]);
+  const rImg = getSpellImg(champJSON["data"][champName]["spells"][3]["id"]);
 
-  let evolvePriority = displayPickrate
+  const evolvePriority = displayPickrate
     ? getEvolvesPriority(evolves?.mostPlayed.order)
     : getEvolvesPriority(evolves?.mostWinrate.order);
 
@@ -21,10 +21,9 @@ function ChampSkills({ evolves, champName, skills, displayPickrate }) {
   while (skillsOrder.length < 17) {
     skillsOrder += "0";
   }
-  let skillPriority = getSkillsPriority(skillsOrder);
+  const skillPriority = getSkillsPriority(skillsOrder);
 
   const getSkillPriorityContainer = (index, array) => {
-    let container = undefined;
     let skillKey, skillImg;
 
     switch (Object.keys(array[index - 1])[0]) {
@@ -47,7 +46,7 @@ function ChampSkills({ evolves, champName, skills, displayPickrate }) {
       default:
     }
 
-    container = (
+    const container = (
       <>
         <img src={skillImg} alt="slt" />
         <span>{skillKey}</span>
@@ -57,7 +56,7 @@ function ChampSkills({ evolves, champName, skills, displayPickrate }) {
   };
 
   const getSkillsOrderContainer = (skillIndex) => {
-    let container = [];
+    const container = [];
 
     Array.from(skillsOrder).forEach((skillUped, index) => {
       if (skillUped === skillIndex) {

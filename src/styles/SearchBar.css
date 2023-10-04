@@ -85,6 +85,12 @@ select {
   align-self: center;
 }
 
+#summoner-search-block > input {
+  font-size: 0.9rem;
+  padding-bottom: 0.4rem;
+  margin-top: 0.4rem;
+}
+
 #summoner-search {
   background-color: inherit;
   border: none;
@@ -97,7 +103,6 @@ select {
   margin-right: 1rem;
 
   -webkit-text-fill-color: none;
-  
 }
 
 #count-search-block {
@@ -108,8 +113,6 @@ select {
 
   background-repeat: no-repeat;
   background-image: url(../assets/search-input.svg);
-
-  padding-bottom: 0.1rem;
 }
 
 #count-search-block > label {
@@ -119,6 +122,12 @@ select {
 
   align-items: center;
   align-self: center;
+}
+
+#count-search-block > input {
+  font-size: 0.9rem;
+  padding-bottom: 0.4rem;
+  margin-top: 0.4rem;
 }
 
 #count-search {

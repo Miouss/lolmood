@@ -131,14 +131,14 @@ function initializeNthItems(arr, isMostPlayed = true) {
   });
 
   const arrSorted = isMostPlayed
-    ? getSorted(arrayType).byMostPlayed()
-    : getSorted(arrayType).byMostWinrate();
+    ? getArrSorted(arrayType).byMostPlayed()
+    : getArrSorted(arrayType).byMostWinrate();
 
   return arrSorted.slice(0, 3);
 }
 
-function getSorted(arr) {
-  const sortBy = (key) => arr.sort((a, b) => b[key] - a[key]);
+function getArrSorted(arr) {
+  const sortBy = (key) => arr.sort((a, b) => b[key] > a[key]);
 
   return {
     byMostPlayed: () => sortBy("played"),
@@ -148,10 +148,10 @@ function getSorted(arr) {
 
 function getSingleItemContainer(itemsArray, displayPickRate) {
   if (!itemsArray || itemsArray.length === 0) {
-    return getEmptyItemsContainer();
+    return <EmptyItemsContainer />;
   }
 
-  let itemContainer = [];
+  const itemContainer = [];
 
   itemsArray.forEach((item) => {
     itemContainer.push(
@@ -173,6 +173,44 @@ function getPickRateContainerForNthItems(nthItems) {
 
   const played = nthItems.reduce((acc, curr) => acc + curr.played, 0);
 
+  return <NthItemContainer played={played} />;
+}
+
+function getMultipleItemsContainer(itemsArray) {
+  if (itemsArray === null) return <EmptyItemsContainer />;
+
+  const { items, rate, played } = itemsArray;
+
+  const nbItemById = {};
+
+  items.forEach(({ id }) => {
+    nbItemById[id] ? (nbItemById[id] += 1) : (nbItemById[id] = 1);
+  });
+
+  const itemContainer = [];
+
+  items.forEach(({ img, id }) => {
+    if (!nbItemById[id]) return;
+
+    const isDuplicateItems = nbItemById[id] > 1;
+
+    const ItemContainer = isDuplicateItems ? (
+      <DuplicateStartItemContainer itemId={nbItemById[id]} img={img} />
+    ) : (
+      <SingleStartItemContainer img={img} />
+    );
+
+    itemContainer.push(ItemContainer);
+
+    delete nbItemById[id];
+  });
+
+  itemContainer.push(<ItemContainerRate rate={rate} played={played} />);
+
+  return itemContainer;
+}
+
+function NthItemContainer({ played }) {
   return (
     <span className="nth-items-container" style={{ paddingLeft: "0.4rem" }}>
       ({played} games)
@@ -180,57 +218,38 @@ function getPickRateContainerForNthItems(nthItems) {
   );
 }
 
-function getMultipleItemsContainer(itemsArray) {
-  if (itemsArray === null) {
-    return getEmptyItemsContainer();
-  }
-
-  const itemContainer = [];
-
-  const duplicateIds = {};
-
-  itemsArray.items.forEach((item) => {
-    if (duplicateIds[item["id"]] === undefined) {
-      duplicateIds[item["id"]] = 1;
-    } else {
-      duplicateIds[item["id"]] += 1;
-    }
-  });
-
-  itemsArray.items.forEach((item) => {
-    if (duplicateIds[item["id"]] !== 0) {
-      const duplicateItemsContainer =
-        duplicateIds[item["id"]] > 1 ? (
-          <span className="duplicate-items">x{duplicateIds[item["id"]]}</span>
-        ) : null;
-
-      itemContainer.push(
-        <div style={{ position: "relative" }}>
-          <img className="items-img" src={item["img"]} />
-          {duplicateItemsContainer}
-        </div>
-      );
-      duplicateIds[item["id"]] = 0;
-    }
-  });
-
-  itemContainer.push(
-    <div className="single-item-container-rate">
-      <span>{itemsArray["rate"]}%</span>
-      <span>{itemsArray["played"]} games</span>
+function SingleStartItemContainer({ img, children }) {
+  return (
+    <div style={{ position: "relative" }}>
+      <img className="items-img" src={img} alt="itemImg" />
+      {children}
     </div>
   );
-
-  return itemContainer;
 }
-function getEmptyItemsContainer() {
+
+function DuplicateStartItemContainer({ itemId, img }) {
   return (
-    <>
-      <div class="empty-items-container">
-        No games with enough data were found, so there is no items stats to
-        display
-      </div>
-    </>
+    <SingleStartItemContainer img={img}>
+      <span className="duplicate-items">x{itemId}</span>
+    </SingleStartItemContainer>
+  );
+}
+
+function ItemContainerRate({ rate, played }) {
+  return (
+    <div className="single-item-container-rate">
+      <span>{rate}%</span>
+      <span>{played} games</span>
+    </div>
+  );
+}
+
+function EmptyItemsContainer() {
+  return (
+    <div class="empty-items-container">
+      No games with enough data were found, so there is no items stats to
+      display
+    </div>
   );
 }
 

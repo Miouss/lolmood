@@ -4,6 +4,7 @@ import SearchBar from "./SearchBar";
 import SummonerStats from "./SummonerStats";
 import ChampStats from "./ChampStats";
 
+import Logo from "../assets/logo.svg";
 import "../styles/Main.css";
 
 function Main(props) {
@@ -12,7 +13,15 @@ function Main(props) {
       <Route
         path="/"
         element={
-          <>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <div style={{ alignSelf: "center", paddingBottom: "70px" }}>
+              <img style={{ width: "200px" }} src={Logo} alt="logo" />
+            </div>
             <div className="search-container">
               <SearchBar
                 hideCount={true}
@@ -20,7 +29,7 @@ function Main(props) {
                 setData={props.setData}
               />
             </div>
-          </>
+          </div>
         }
       />
       <Route

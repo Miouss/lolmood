@@ -4,29 +4,34 @@ import champJSON from "../assets/loldata/current/data/en_US/championFull.json";
 
 import "../styles/ChampSkills.css";
 
+const MAX_LVL = 18;
+const MAX_SKILL_LVL = 5;
+
 function ChampSkills({ evolves, champName, skills, displayPickrate }) {
-  const qImg = getSpellImg(champJSON["data"][champName]["spells"][0]["id"]);
-  const wImg = getSpellImg(champJSON["data"][champName]["spells"][1]["id"]);
-  const eImg = getSpellImg(champJSON["data"][champName]["spells"][2]["id"]);
-  const rImg = getSpellImg(champJSON["data"][champName]["spells"][3]["id"]);
+  const { spells } = champJSON.data[champName];
 
-  const evolvePriority = displayPickrate
-    ? getEvolvesPriority(evolves?.mostPlayed.order)
-    : getEvolvesPriority(evolves?.mostWinrate.order);
+  const qImg = getSpellImg(spells[0].id);
+  const wImg = getSpellImg(spells[1].id);
+  const eImg = getSpellImg(spells[2].id);
+  const rImg = getSpellImg(spells[3].id);
 
-  let skillsOrder = displayPickrate
-    ? skills["mostPlayed"].order
-    : skills["mostWinrate"].order;
+  const rateKey = displayPickrate ? "mostPlayed" : "mostWinrate";
 
-  while (skillsOrder.length < 17) {
+  const evolvePriority = getEvolvesPriority(evolves?.[rateKey].order);
+
+  let skillsOrder = skills[rateKey].order;
+
+  while (skillsOrder.length < MAX_LVL) {
     skillsOrder += "0";
   }
-  const skillPriority = getSkillsPriority(skillsOrder);
 
-  const getSkillPriorityContainer = (index, array) => {
+  const skillPriority = getSkillsPriority(skillsOrder);
+  const skillOrderArr = Array.from(skillsOrder);
+
+  const getSpellPriorityContainer = (index, arr) => {
     let skillKey, skillImg;
 
-    switch (Object.keys(array[index - 1])[0]) {
+    switch (Object.keys(arr[index - 1])[0]) {
       case "Q":
         skillImg = qImg;
         skillKey = "Q";
@@ -46,153 +51,169 @@ function ChampSkills({ evolves, champName, skills, displayPickrate }) {
       default:
     }
 
-    const container = (
+    return (
       <>
         <img src={skillImg} alt="slt" />
         <span>{skillKey}</span>
       </>
     );
-    return container;
   };
 
-  const getSkillsOrderContainer = (skillIndex) => {
-    const container = [];
+  const getSkillPriorityContainer = (index) =>
+    getSpellPriorityContainer(index, skillPriority);
 
-    Array.from(skillsOrder).forEach((skillUped, index) => {
-      if (skillUped === skillIndex) {
-        container.push(
-          <span
-            style={{ background: "rgba(247, 247, 255, 0.1)", color: "white" }}
-          >
-            {index + 1}
-          </span>
-        );
-      } else {
-        container.push(<span style={{ background: "#7878B4" }}></span>);
-      }
+  const getEvolvesPriorityContainer = (index) =>
+    getSpellPriorityContainer(index, evolvePriority);
+
+  const getSkillsOrderContainer = (currSkillIndex) => {
+    const containers = [];
+
+    skillOrderArr.forEach((skillUped, index) => {
+      const isSkillUped = skillUped === currSkillIndex;
+
+      const Container = isSkillUped ? (
+        <SkillOrderContainerFilled
+          key={index}
+          i={index}
+        ></SkillOrderContainerFilled>
+      ) : (
+        <SkillOrderContainerEmpty key={index}></SkillOrderContainerEmpty>
+      );
+
+      containers.push(Container);
     });
 
-    return container;
+    return containers;
   };
 
-  const checkEvolvePriority = (evolvePriority) => {
-    if (!evolvePriority) {
-      return (
-        <span style={{ flex: "1", fontStyle: "italic", margin: "1rem" }}>
-          This champ has no evolution
-        </span>
-      );
-    }
+  const SkillOrderContainerFilled = ({ i }) => (
+    <span style={{ background: "rgba(247, 247, 255, 0.1)", color: "white" }}>
+      {i + 1}
+    </span>
+  );
 
-    return (
-      <>
-        <div className="single-skill-priority-container">
-          {getSkillPriorityContainer(1, evolvePriority)}
-        </div>
-        <div className="skill-priority-separator">
-          <span>{">"}</span>
-        </div>
-        <div className="single-skill-priority-container">
-          {getSkillPriorityContainer(2, evolvePriority)}
-        </div>
-        <div className="skill-priority-separator">
-          <span>{">"}</span>
-        </div>
-        <div className="single-skill-priority-container">
-          {getSkillPriorityContainer(3, evolvePriority)}
-        </div>
-      </>
-    );
-  };
+  const SkillOrderContainerEmpty = () => (
+    <span style={{ background: "#7878B4" }}></span>
+  );
+
+  const SkillPriorityFrame = ({ children }) => (
+    <div id="skills-priority-frame">
+      <span>Skills priority</span>
+      <div className="skills-priority-container">{children}</div>
+    </div>
+  );
+  const SkillPriorityContainer = ({ priorityNb }) => (
+    <div className="single-skill-priority-container">
+      {getSkillPriorityContainer(priorityNb)}
+    </div>
+  );
+
+  const SpellPrioritySeparator = () => (
+    <div className="skill-priority-separator">
+      <span>{">"}</span>
+    </div>
+  );
+
+  const SkillContainer = ({ srcImg, skillIndex }) => (
+    <div className="skill-container">
+      <img src={srcImg} alt="slt" />
+      <div className="skill-path">{getSkillsOrderContainer(skillIndex)}</div>
+    </div>
+  );
+
+  const EvolvePriorityFrame = ({ children }) => (
+    <div id="skills-speciality-frame">
+      <span>Evolution Priority</span>
+      <div className="skills-priority-container">{children}</div>
+    </div>
+  );
+
+  const EvolvePriorityContainer = ({ priorityNb }) => (
+    <div className="single-skill-priority-container">
+      {getEvolvesPriorityContainer(priorityNb)}
+    </div>
+  );
+
+  const EmptyEvolveContainer = () => (
+    <span style={{ flex: "1", fontStyle: "italic", margin: "1rem" }}>
+      This champ has no evolution
+    </span>
+  );
 
   return (
-    <>
-      <div id="skills-frame">
-        <div id="champ-skills-path-frame">
-          <div className="skill-container">
-            <img src={qImg} alt="slt" />
-            <div className="skill-path">{getSkillsOrderContainer("1")}</div>
-          </div>
-          <div className="skill-container">
-            <img src={wImg} alt="slt" />
-            <div className="skill-path">{getSkillsOrderContainer("2")}</div>
-          </div>
-          <div className="skill-container">
-            <img src={eImg} alt="slt" />
-            <div className="skill-path">{getSkillsOrderContainer("3")}</div>
-          </div>
-          <div className="skill-container">
-            <img src={rImg} alt="slt" />
-            <div className="skill-path">{getSkillsOrderContainer("4")}</div>
-          </div>
-        </div>
-
-        <div id="skills-and-evolutions-priority-frame">
-          <div id="skills-priority-frame">
-            <span>Skills priority</span>
-            <div className="skills-priority-container">
-              <div className="single-skill-priority-container">
-                {getSkillPriorityContainer(1, skillPriority)}
-              </div>
-              <div className="skill-priority-separator">
-                <span>{">"}</span>
-              </div>
-              <div className="single-skill-priority-container">
-                {getSkillPriorityContainer(2, skillPriority)}
-              </div>
-              <div className="skill-priority-separator">
-                <span>{">"}</span>
-              </div>
-              <div className="single-skill-priority-container">
-                {getSkillPriorityContainer(3, skillPriority)}
-              </div>
-            </div>
-          </div>
-          <div id="skills-speciality-frame">
-            <span>Evolution Priority</span>
-
-            <div className="skills-priority-container">
-              {checkEvolvePriority(evolvePriority)}
-            </div>
-          </div>
-        </div>
+    <div id="skills-frame">
+      <div id="champ-skills-path-frame">
+        <SkillContainer srcImg={qImg} skillIndex="1" />
+        <SkillContainer srcImg={wImg} skillIndex="2" />
+        <SkillContainer srcImg={eImg} skillIndex="3" />
+        <SkillContainer srcImg={rImg} skillIndex="4" />
       </div>
-    </>
+
+      <div id="skills-and-evolutions-priority-frame">
+        <SkillPriorityFrame>
+          <SkillPriorityContainer priorityNb={1} />
+          <SpellPrioritySeparator />
+          <SkillPriorityContainer priorityNb={2} />
+          <SpellPrioritySeparator />
+          <SkillPriorityContainer priorityNb={3} />
+        </SkillPriorityFrame>
+
+        <EvolvePriorityFrame>
+          {evolvePriority ? (
+            <>
+              <EvolvePriorityContainer priorityNb={1} />
+              <SpellPrioritySeparator />
+              <EvolvePriorityContainer priorityNb={2} />
+              <SpellPrioritySeparator />
+              <EvolvePriorityContainer priorityNb={3} />
+            </>
+          ) : (
+            <EmptyEvolveContainer />
+          )}
+        </EvolvePriorityFrame>
+      </div>
+    </div>
   );
 }
 
 function getSkillsPriority(skillsPath) {
-  return [
+  const matchCond = (i) =>
+    skillsPath.match(new RegExp(i, "g")).length < MAX_SKILL_LVL
+      ? MAX_LVL
+      : skillsPath.lastIndexOf(`${i}`);
+
+  const skillsArr = [
     {
-      Q: skillsPath.match(/1/g).length < 5 ? 17 : skillsPath.lastIndexOf("1"),
+      Q: matchCond(1),
     },
     {
-      W: skillsPath.match(/2/g).length < 5 ? 17 : skillsPath.lastIndexOf("2"),
+      W: matchCond(2),
     },
     {
-      E: skillsPath.match(/3/g).length < 5 ? 17 : skillsPath.lastIndexOf("3"),
+      E: matchCond(3),
     },
-  ].sort((a, b) => Object.values(a)[0] > Object.values(b)[0]);
+  ];
+
+  sortByValue(skillsArr);
+
+  return skillsArr;
 }
 
 function getEvolvesPriority(evolvesPath) {
   if (!evolvesPath) return null;
 
-  let qIndex = evolvesPath.indexOf("1");
-  let wIndex = evolvesPath.indexOf("2");
-  let eIndex = evolvesPath.indexOf("3");
-  let rIndex = evolvesPath.indexOf("4");
+  const getIndex = (i) => evolvesPath.indexOf(`${i}`);
 
-  if (qIndex === -1) qIndex = 5;
-  if (wIndex === -1) wIndex = 5;
-  if (eIndex === -1) eIndex = 5;
-  if (rIndex === -1) rIndex = 5;
+  const qIndex = getIndex(1);
+  const wIndex = getIndex(2);
+  const eIndex = getIndex(3);
+  const rIndex = getIndex(4);
 
-  if ((qIndex === 5) & (wIndex === 5) & (eIndex === 5) & (rIndex === 5)) {
-    return [];
-  }
+  const hasEvolve = qIndex || wIndex || eIndex || rIndex;
 
-  return [
+  if (!hasEvolve) return null;
+
+  const evolvesArr = [
     {
       Q: qIndex,
     },
@@ -205,7 +226,15 @@ function getEvolvesPriority(evolvesPath) {
     {
       R: rIndex,
     },
-  ].sort((a, b) => Object.values(a)[0] > Object.values(b)[0]);
+  ];
+
+  sortByValue(evolvesArr);
+
+  return evolvesArr;
+}
+
+function sortByValue(array) {
+  array.sort((a, b) => Object.values(a)[0] > Object.values(b)[0]);
 }
 
 export default ChampSkills;

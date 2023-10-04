@@ -85,75 +85,73 @@ function SearchBar(props) {
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <div
-          id="region-select-block"
-          style={{ backgroundPosition: `${regionBackground}` }}
-        >
-          <label onClick={handleOnClickRegion} htmlFor="region-select">
-            Region
-          </label>
+    <form onSubmit={handleSubmit}>
+      <div
+        id="region-select-block"
+        style={{ backgroundPosition: `${regionBackground}` }}
+      >
+        <label onClick={handleOnClickRegion} htmlFor="region-select">
+          Region
+        </label>
 
-          <select
-            ref={regionSelectedRef}
-            hidden={isRegionSelectHidden}
-            id="region-select"
-          >
-            <SearchOption
-              regions={[
-                "EUW",
-                "EUNE",
-                "NA",
-                "BR",
-                "LAN",
-                "LAS",
-                "OCE",
-                "KR",
-                "RU",
-                "TR",
-                "JP",
-              ]}
-            />
-          </select>
-        </div>
-        <div
-          id="summoner-search-block"
-          style={{ backgroundPosition: `${summonerBackground}` }}
+        <select
+          ref={regionSelectedRef}
+          hidden={isRegionSelectHidden}
+          id="region-select"
         >
-          <label htmlFor="summoner-search" onClick={handleOnClickSummoner}>
-            Summoner Search
-          </label>
-          <input
-            hidden={isSummonerInputHidden}
-            id="summoner-search"
-            ref={summonerInputRef}
+          <SearchOption
+            regions={[
+              "EUW",
+              "EUNE",
+              "NA",
+              "BR",
+              "LAN",
+              "LAS",
+              "OCE",
+              "KR",
+              "RU",
+              "TR",
+              "JP",
+            ]}
           />
-        </div>
-        <div
-          hidden={props.hideCount}
-          id="count-search-block"
-          style={{ backgroundPosition: `${countBackground}` }}
-        >
-          <label htmlFor="count-search" onClick={handleOnClickCount}>
-            Number of games
-          </label>
-          <input
-            hidden={isCountInputHidden}
-            id="count-search"
-            defaultValue="10"
-            ref={countInputRef}
-          />
-        </div>
-        <button type="submit" id="search-button">
-          <FontAwesomeIcon
-            icon={searchIcon}
-            fontSize="1.8rem"
-            spin={searchIcon === faSpinner ? true : false}
-          />
-        </button>
-      </form>
-    </>
+        </select>
+      </div>
+      <div
+        id="summoner-search-block"
+        style={{ backgroundPosition: `${summonerBackground}` }}
+      >
+        <label htmlFor="summoner-search" onClick={handleOnClickSummoner}>
+          Summoner Search
+        </label>
+        <input
+          hidden={isSummonerInputHidden}
+          id="summoner-search"
+          ref={summonerInputRef}
+        />
+      </div>
+      <div
+        hidden={props.hideCount}
+        id="count-search-block"
+        style={{ backgroundPosition: `${countBackground}` }}
+      >
+        <label htmlFor="count-search" onClick={handleOnClickCount}>
+          Number of games
+        </label>
+        <input
+          hidden={isCountInputHidden}
+          id="count-search"
+          defaultValue="10"
+          ref={countInputRef}
+        />
+      </div>
+      <button type="submit" id="search-button">
+        <FontAwesomeIcon
+          icon={searchIcon}
+          fontSize="1.8rem"
+          spin={searchIcon === faSpinner ? true : false}
+        />
+      </button>
+    </form>
   );
 }
 

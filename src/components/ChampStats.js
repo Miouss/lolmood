@@ -64,7 +64,7 @@ function ChampStats() {
         <button id="back-button-component">
           <img
             src={backButtonSVG}
-            onClick={() => (location["state"] === null ? nav("/") : nav(-1))}
+            onClick={() => (location.state === null ? nav("/") : nav(-1))}
             alt="slt"
           />
         </button>
@@ -75,15 +75,15 @@ function ChampStats() {
 
         <div id="runes-component">
           <Runes
-            runes={champStats["runes"]}
-            statsMods={champStats["mostPlayedStatsMods"]}
+            runes={champStats.runes}
+            mods={champStats.mostPlayedStatsMods.mods}
             displayPickRate={displayPickRate}
           />
         </div>
 
         <div id="sums-component">
           <Sums
-            summoners={champStats["summoners"]}
+            summoners={champStats.summoners}
             displayPickRate={displayPickRate}
           />
         </div>
@@ -98,8 +98,8 @@ function ChampStats() {
 
         <div id="skills-component">
           <Skills
-            skills={champStats["skillsOrder"]}
-            evolves={champStats["evolvesOrder"]}
+            skills={champStats.skillsOrder}
+            evolves={champStats.evolvesOrder}
             champName={champName}
             displayPickRate={displayPickRate}
           />

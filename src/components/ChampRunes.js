@@ -8,94 +8,133 @@ import statsModsSVG from "../assets/stats-mods.svg";
 
 import "../styles/ChampRunes.css";
 
-function ChampRunes({ runes, statsMods, displayPickRate }) {
-  const runesMW = initializeRunesTree(runes["mostWinrate"]);
-  const runesMP = initializeRunesTree(runes["mostPlayed"]);
+function ChampRunes({ runes, mods, displayPickRate }) {
+  const runesMW = initializeRunesTree(runes.mostWinrate);
+  const runesMP = initializeRunesTree(runes.mostPlayed);
 
-  const statsModsTree = initializeStatsModsTree(statsMods);
+  const statsModsMP = initializeStatsModsTree(mods);
 
-  const runesTree = displayPickRate ? runesMP : runesMW;
+  const { primaryStyle, subStyle } = displayPickRate ? runesMP : runesMW;
+  const primaryRunes = primaryStyle.runes;
+  const subRunes = subStyle.runes;
+
+  const StatsModsContainer = ({ children }) => (
+    <div id="stats-mods-container">{children}</div>
+  );
+
+  const StatsModsDecoratorImg = () => (
+    <img id="stats-mods-svg" src={statsModsSVG} alt="stats mods decorator" />
+  );
+
+  const StatModImg = ({ src }) => <img src={src} alt="stat mod img" />;
+
+  const RunesContentContainer = ({ children }) => (
+    <div id="runes-contents">{children}</div>
+  );
+
+  const RunesFrameImg = () => <img src={runeFrameSVG} alt="rune frame img" />;
+
+  const RunesContainer = ({ children }) => (
+    <div id="runes-container">{children}</div>
+  );
+
+  const RunesFrameContainer = ({ children }) => (
+    <div id="runes-frame-container">{children}</div>
+  );
+
+  const RunesTitle = () => <div id="runes-title">RUNES</div>;
+
+  const PrimaryStyleContainer = ({ children }) => (
+    <div id="primary-style-container">{children}</div>
+  );
+
+  const SubStyleContainer = ({ children }) => (
+    <div id="sub-style-container">{children}</div>
+  );
+
+  const PrimaryStyleRunesContainer = ({ children }) => (
+    <div id="primary-style-runes">{children}</div>
+  );
+
+  const SubStyleRunesContainer = ({ children }) => (
+    <div id="sub-style-runes">{children}</div>
+  );
+
+  const PerkImg = () => (
+    <div id="runes-tree-perk">
+      <img src={primaryRunes[0].img} alt="perk img" />
+    </div>
+  );
+
+  const RuneImg = ({ src }) => (
+    <img className="runes-tree-rune" src={src} alt="rune img" />
+  );
+
+  const PrimaryStyleDecoratorImg = () => (
+    <img
+      id="primary-style-svg"
+      src={primaryStyleSVG}
+      alt="primary style decorator"
+    />
+  );
+
+  const SubStyleDecoratorImg = () => (
+    <img id="sub-style-svg" src={subStyleSVG} alt="sub style decorator" />
+  );
+
+  const StyleImg = ({ src }) => (
+    <img className="runes-tree-style" src={src} alt="style img" />
+  );
+
+  const StyleTitleContainer = ({ name, children }) => (
+    <div>
+      {children}
+      <span> {name}</span>
+    </div>
+  );
 
   return (
-    <>
-      <div id="runes-frame">
-        <div id="rune-title">RUNES</div>
-        <div id="rune-frame">
-          <img id="rune-frame-svg" src={runeFrameSVG} alt="slt" />
-          <div id="runes-contents">
-            <div id="primary-style-container">
-              <img id="primary-style-svg" src={primaryStyleSVG} alt="" />
-              <div>
-                <img
-                  className="runes-tree-style"
-                  src={runesTree["primaryStyle"]["img"]}
-                  alt="SLT"
-                />
-                <span> {runesTree["primaryStyle"]["name"]}</span>
-              </div>
-              <div id="primary-style-runes">
-                <div id="runes-tree-perk">
-                  <img
-                    src={runesTree["primaryStyle"]["runes"][0]["img"]}
-                    alt="SLT"
-                  />
-                </div>
-                <img
-                  className="runes-tree-rune"
-                  src={runesTree["primaryStyle"]["runes"][1]["img"]}
-                  alt="SLT"
-                />
-                <img
-                  className="runes-tree-rune"
-                  src={runesTree["primaryStyle"]["runes"][2]["img"]}
-                  alt="SLT"
-                />
-                <img
-                  className="runes-tree-rune"
-                  src={runesTree["primaryStyle"]["runes"][3]["img"]}
-                  alt="SLT"
-                />
-              </div>
-            </div>
+    <RunesContainer>
+      <RunesTitle />
+      <RunesFrameContainer>
+        <RunesFrameImg />
+        <RunesContentContainer>
+          <PrimaryStyleContainer>
+            <PrimaryStyleDecoratorImg />
+            <StyleTitleContainer name={primaryStyle.name}>
+              <StyleImg src={primaryStyle.img} />
+            </StyleTitleContainer>
+            <PrimaryStyleRunesContainer>
+              <PerkImg />
+              <RuneImg src={primaryRunes[1].img} />
+              <RuneImg src={primaryRunes[2].img} />
+              <RuneImg src={primaryRunes[3].img} />
+            </PrimaryStyleRunesContainer>
+          </PrimaryStyleContainer>
 
-            <div>
-              <div id="sub-style-container">
-                <img id="sub-style-svg" src={subStyleSVG} alt="" />
-                <div>
-                  <img
-                    className="runes-tree-style"
-                    src={runesTree["subStyle"]["img"]}
-                    alt="SLT"
-                  />
-                  <span> {runesTree["subStyle"]["name"]}</span>
-                </div>
+          <div>
+            <SubStyleContainer>
+              <SubStyleDecoratorImg />
+              <StyleTitleContainer name={subStyle.name}>
+                <StyleImg src={subStyle.img} />
+              </StyleTitleContainer>
 
-                <div id="sub-style-runes">
-                  <img
-                    className="runes-tree-rune"
-                    src={runesTree["subStyle"]["runes"][0]["img"]}
-                    alt="SLT"
-                  />
-                  <img
-                    className="runes-tree-rune"
-                    src={runesTree["subStyle"]["runes"][1]["img"]}
-                    alt="SLT"
-                  />
-                </div>
-              </div>
+              <SubStyleRunesContainer>
+                <RuneImg src={subRunes[0].img} />
+                <RuneImg src={subRunes[1].img} />
+              </SubStyleRunesContainer>
+            </SubStyleContainer>
 
-              <div id="stats-mods-container">
-                <img id="stats-mods-svg" src={statsModsSVG} alt="" />
-
-                <img src={statsModsTree["mods"][0]["img"]} alt="SLT" />
-                <img src={statsModsTree["mods"][1]["img"]} alt="SLT" />
-                <img src={statsModsTree["mods"][2]["img"]} alt="SLT" />
-              </div>
-            </div>
+            <StatsModsContainer>
+              <StatsModsDecoratorImg />
+              <StatModImg src={statsModsMP[0].img} />
+              <StatModImg src={statsModsMP[1].img} />
+              <StatModImg src={statsModsMP[2].img} />
+            </StatsModsContainer>
           </div>
-        </div>
-      </div>
-    </>
+        </RunesContentContainer>
+      </RunesFrameContainer>
+    </RunesContainer>
   );
 }
 
@@ -104,46 +143,36 @@ function initializeRunesTree(runesTree) {
   const [rune1, rune2, rune3] = runesTree.primary.runesIds;
   const [rune4, rune5] = runesTree.secondary.runesIds;
 
-  return {
-    primaryStyle: {
-      id: primaryId,
-      img: getRuneImg(primaryId),
-      name: getStyleName(primaryId),
-      runes: [
-        { id: perkId, img: getRuneImg(perkId) },
-        { id: rune1, img: getRuneImg(rune1) },
-        { id: rune2, img: getRuneImg(rune2) },
-        { id: rune3, img: getRuneImg(rune3) },
-      ],
-    },
-    subStyle: {
-      id: subId,
-      img: getRuneImg(subId),
-      name: getStyleName(subId),
-      runes: [
-        { id: rune4, img: getRuneImg(rune4) },
-        { id: rune5, img: getRuneImg(rune5) },
-      ],
-    },
-  };
-}
-
-function initializeStatsModsTree(statsMods) {
-  const statsModsArr = [];
-
-  const { played, playrate, mods } = statsMods;
-
-  mods.forEach((id) => {
-    statsModsArr.push({
-      id: id,
-      img: statsModImgs[id],
-    });
+  const styleBase = (id) => ({
+    id,
+    img: getRuneImg(id),
+    name: getStyleName(id),
   });
 
+  const runeObj = (id) => ({ id, img: getRuneImg(id) });
+
   return {
-    mods: statsModsArr,
-    played,
-    rate: playrate,
+    primaryStyle: {
+      ...styleBase(primaryId),
+      runes: [runeObj(perkId), runeObj(rune1), runeObj(rune2), runeObj(rune3)],
+    },
+    subStyle: {
+      ...styleBase(subId),
+      runes: [runeObj(rune4), runeObj(rune5)],
+    },
   };
 }
+
+function initializeStatsModsTree(mods) {
+  const statsModsArr = [];
+
+  const statsModObj = (id) => ({ id, img: statsModImgs[id] });
+
+  mods.forEach((id) => {
+    statsModsArr.push(statsModObj(id));
+  });
+
+  return statsModsArr;
+}
+
 export default ChampRunes;

@@ -1,8 +1,8 @@
-#runes-frame {
+#runes-container {
   width: max-content;
 }
 
-#rune-title {
+#runes-title {
   text-align: center;
   font-family: "Dune Rise";
   font-style: normal;
@@ -34,7 +34,7 @@
   text-align: center;
 }
 
-#rune-frame {
+#runes-frame-container {
   display: flex;
 }
 

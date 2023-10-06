@@ -6,13 +6,14 @@ import sumsDesignSVG from "../assets/sums-design.svg";
 import "../styles/ChampSums.css";
 
 function ChampSums({ summonersData, displayPickRate }) {
-  const summonersMP = initializeTree(summonersData.mostPlayed);
+  const sumsMP = initializeSumsMP(summonersData.mostPlayed);
 
-  const summonersMW = initializeTree(summonersData.mostWinrate, false);
+  const sumsMW = initializeSumsMW(summonersData.mostWinrate);
 
-  const { rate, summoners } = displayPickRate ? summonersMP : summonersMW;
+  const { rate, summoners } = displayPickRate ? sumsMP : sumsMW;
 
   const SummonersTitle = () => <span id="sums-title">Summoners</span>;
+
   const SummonerDecoratorFrame = () => (
     <img id="sums-frame-svg" src={sumsFrameSVG} alt="slt" />
   );
@@ -54,21 +55,29 @@ function ChampSums({ summonersData, displayPickRate }) {
   );
 }
 
-function initializeTree(arr, isMostPlayed = true) {
-  const rate = isMostPlayed ? arr.playrate : arr.winrate;
+function initializeSumsMP(sums) {
+  return initializeSums(sums, sums.playrate);
+}
 
-  const arrSorted = [];
+function initializeSumsMW(sums) {
+  return initializeSums(sums, sums.winrate);
+}
 
-  arr.sums.forEach((sum) => {
-    arrSorted.push({
-      id: sum,
-      img: getSummonerImg(sum),
-    });
+function initializeSums({ sums, played }, rate) {
+  const sumsSorted = [];
+
+  const sumObj = (id) => ({
+    id,
+    img: getSummonerImg(id),
+  });
+
+  sums.forEach((id) => {
+    sumsSorted.push(sumObj(id));
   });
 
   return {
-    summoners: arrSorted,
-    played: arr.played,
+    summoners: sumsSorted,
+    played,
     rate,
   };
 }

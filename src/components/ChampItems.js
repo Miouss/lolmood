@@ -5,29 +5,29 @@ import itemSetDesignSVG from "../assets/items-set-design.svg";
 
 import "../styles/ChampItems.css";
 
-function ChampItems({ starting, completed, displayPickRate }) {
+function ChampItems({ starting, completed: { core, nth }, displayPickRate }) {
   const startItems = {
     MP: initializeItems(starting.mostPlayed),
     MW: initializeItems(starting.mostWinrate, false),
   };
 
   const coreItems = {
-    MP: initializeItems(completed.core.mostPlayed),
-    MW: initializeItems(completed.core.mostWinrate, false),
+    MP: initializeItems(core.mostPlayed),
+    MW: initializeItems(core.mostWinrate, false),
   };
 
   const nthItems = {
     4: {
-      MP: initializeNthItems(completed.nth.mostPlayed[0]),
-      MW: initializeNthItems(completed.nth.mostWinrate[0], false),
+      MP: initializeNthItems(nth.mostPlayed[0]),
+      MW: initializeNthItems(nth.mostWinrate[0], false),
     },
     5: {
-      MP: initializeNthItems(completed.nth.mostPlayed[1]),
-      MW: initializeNthItems(completed.nth.mostWinrate[1], false),
+      MP: initializeNthItems(nth.mostPlayed[1]),
+      MW: initializeNthItems(nth.mostWinrate[1], false),
     },
     6: {
-      MP: initializeNthItems(completed.nth.mostPlayed[2]),
-      MW: initializeNthItems(completed.nth.mostWinrate[2], false),
+      MP: initializeNthItems(nth.mostPlayed[2]),
+      MW: initializeNthItems(nth.mostWinrate[2], false),
     },
   };
 

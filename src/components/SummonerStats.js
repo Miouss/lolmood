@@ -19,9 +19,9 @@ function SummonerStats({ data, lang, setData }) {
 
   useEffect(() => {
     if (data === null) {
-      let queries = location["pathname"].split("/");
+      const [, , region, summonerName] = location["pathname"].split("/");
 
-      requestData(queries[3], queries[2]);
+      requestData(summonerName, region);
     }
   }, []);
 

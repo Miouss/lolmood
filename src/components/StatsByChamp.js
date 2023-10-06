@@ -5,10 +5,12 @@ import StatsByChampCard from "./StatsByChampCard";
 import "../styles/StatsByChamp.css";
 
 function StatsByChamp({ topChampsByMostPlayed }) {
-  let StatsByChampCards = [];
+  const StatsByChampCards = [];
 
-  topChampsByMostPlayed.forEach((element) => {
-    StatsByChampCards.push(<StatsByChampCard key={element} data={element} />);
+  topChampsByMostPlayed.forEach((champStats) => {
+    StatsByChampCards.push(
+      <StatsByChampCard key={champStats[0]} data={champStats} />
+    );
   });
 
   return (

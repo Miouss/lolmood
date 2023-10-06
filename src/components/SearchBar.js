@@ -10,85 +10,85 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
-function SearchBar(props) {
+const MIN_COUNT = 5;
+const MAX_COUNT = 50;
+
+function SearchBar({ hideCount, setData }) {
+  const navigate = useNavigate();
+
   const regionSelectedRef = useRef();
   const countInputRef = useRef();
   const summonerInputRef = useRef();
 
-  const [isRegionSelectHidden, setRegionSelectHidden] = useState(true);
-  const [regionBackground, setRegionBackground] = useState("center");
+  const [isRegionSelectClicked, setIsRegionSelectClicked] = useState(false);
+  const [isSummonerInputClicked, setIsSummonerInputClicked] = useState(false);
+  const [isCountInputClicked, setIsCountInputClicked] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
 
-  const [isSummonerInputHidden, setSummonerInputHidden] = useState(true);
-  const [summonerBackground, setSummonerBackground] = useState("center");
-
-  const [isCountInputHidden, setCountInputHidden] = useState(true);
-  const [countBackground, setCountBackground] = useState("center");
-
-  const [searchIcon, setSearchIcon] = useState(faMagnifyingGlass);
-
-  const navigate = useNavigate();
-
-  async function requestData(summonerName, regionSelected, count) {
+  const requestData = async (summonerName, regionSelected, count) => {
     const data = await fetchGamesData(summonerName, regionSelected, count);
 
-    setSearchIcon(faMagnifyingGlass);
+    setIsSearching(false);
 
-    props.setData(data);
+    setData(data);
 
     navigate(`/games/${regionSelected}/${data.account.name}`);
-  }
+  };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
     const summonerName = summonerInputRef.current.value;
     const count = parseInt(countInputRef.current.value);
     const regionSelected = regionSelectedRef.current.value;
 
-    if (regionSelected === undefined) {
-      alert("You have to select a region first");
-    } else if (summonerName === "") {
-      alert("You have to enter a summoner name to search");
-    } else if (isNaN(count) || count < 1 || count > 49) {
-      alert("You have to enter a number of history game between 1 - 49");
-    } else {
-      setSearchIcon(faSpinner);
-      requestData(summonerName, regionSelected, count);
-    }
+    const isRegionSelected = regionSelected !== undefined;
+    const isSummonerNameEntered = summonerName !== "";
+    const isCountInRange = count >= MIN_COUNT && count <= MAX_COUNT;
+
+    if (!isRegionSelected) return alert("You have to select a region first");
+    if (!isSummonerNameEntered)
+      return alert("You have to enter a summoner name to search");
+    if (!isCountInRange)
+      return alert(
+        `You have to enter a number of history game between ${MIN_COUNT} - ${MAX_COUNT}`
+      );
+
+    setIsSearching(true);
+    requestData(summonerName, regionSelected, count);
   };
 
   const handleOnClickRegion = () => {
-    setRegionSelectHidden(!isRegionSelectHidden);
-    if (regionBackground === "center") {
-      setRegionBackground("bottom");
-    } else {
-      setRegionBackground("center");
-    }
+    setIsRegionSelectClicked(!isRegionSelectClicked);
   };
 
   const handleOnClickSummoner = () => {
-    setSummonerInputHidden(!isSummonerInputHidden);
-    if (summonerBackground === "center") {
-      setSummonerBackground("bottom");
-    } else {
-      setSummonerBackground("center");
-    }
+    setIsSummonerInputClicked(!isSummonerInputClicked);
   };
 
   const handleOnClickCount = () => {
-    setCountInputHidden(!isCountInputHidden);
-    if (countBackground === "center") {
-      setCountBackground("bottom");
-    } else {
-      setCountBackground("center");
-    }
+    setIsCountInputClicked(!isCountInputClicked);
   };
+
+  const [regionBgPos, isRegionSelectHidden] = isRegionSelectClicked
+    ? ["bottom", false]
+    : ["center", true];
+
+  const [summonerBackground, isSummonerInputHidden] = isSummonerInputClicked
+    ? ["bottom", false]
+    : ["center", true];
+
+  const [countBackground, isCountInputHidden] = isCountInputClicked
+    ? ["bottom", false]
+    : ["center", true];
+
+  const searchIcon = isSearching ? faSpinner : faMagnifyingGlass;
 
   return (
     <form onSubmit={handleSubmit}>
       <div
         id="region-select-block"
-        style={{ backgroundPosition: `${regionBackground}` }}
+        style={{ backgroundPosition: `${regionBgPos}` }}
       >
         <label onClick={handleOnClickRegion} htmlFor="region-select">
           Region
@@ -130,7 +130,7 @@ function SearchBar(props) {
         />
       </div>
       <div
-        hidden={props.hideCount}
+        hidden={hideCount}
         id="count-search-block"
         style={{ backgroundPosition: `${countBackground}` }}
       >
@@ -148,7 +148,7 @@ function SearchBar(props) {
         <FontAwesomeIcon
           icon={searchIcon}
           fontSize="1.8rem"
-          spin={searchIcon === faSpinner ? true : false}
+          spin={searchIcon === faSpinner}
         />
       </button>
     </form>

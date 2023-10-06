@@ -3,7 +3,8 @@ import React from "react";
 import enRunesJSON from "../assets/loldata/current/data/en_US/runesReforged.json";
 import frRunesJSON from "../assets/loldata/current/data/fr_FR/runesReforged.json";
 
-import GameHistoryCardTooltip from "./GameHistoryCardTooltip";
+import { GameHistoryCardTooltipRunes } from "./GameHistoryCardTooltip";
+import { GameHistoryCardTooltipPerk } from "./GameHistoryCardTooltip";
 
 import { statsModImgs, getRuneImg } from "./runesImg";
 
@@ -46,9 +47,8 @@ function GameHistoryCardStyles(props) {
   return (
     <div className="game-history-card-style">
       <div className="card-perk">
-        <GameHistoryCardTooltip
+        <GameHistoryCardTooltipPerk
           key={`${props.identifier}${props.idPerk}`}
-          type="perk"
           runeJSON={primaryRuneJSON}
           idPerk={props.idPerk}
           perkIcon={perkIcon}
@@ -58,9 +58,8 @@ function GameHistoryCardStyles(props) {
         <div className="card-primary-style">
           {primaryRuneIcons.map((primaryRuneIcon, index) => {
             return (
-              <GameHistoryCardTooltip
+              <GameHistoryCardTooltipRunes
                 key={`${props.identifier}${props.idPerk}${index}`}
-                type="runes"
                 runeJSON={primaryRuneJSON}
                 idRunes={props.idRunes}
                 runeIcon={primaryRuneIcon}
@@ -73,9 +72,8 @@ function GameHistoryCardStyles(props) {
         <div className="card-sub-style">
           {subRuneIcons.map((subRuneIcon, index) => {
             return (
-              <GameHistoryCardTooltip
+              <GameHistoryCardTooltipRunes
                 key={`${props.identifier}${props.idPerk}${index + 3}`}
-                type="runes"
                 runeJSON={subRuneJSON}
                 idRunes={props.idRunes}
                 runeIcon={subRuneIcon}

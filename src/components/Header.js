@@ -18,17 +18,13 @@ function Header(props) {
   }
   return (
     <>
-      <div id="header-logo" onClick={() => navigate('/')}>
+      <div id="header-logo" onClick={() => navigate("/")}>
         <img src={logoSVG} alt="Logo" />
         <span>LOL Mood</span>
       </div>
 
       <div id="search-bar">
-        <SearchBar
-          hideCount={false}
-          data={props.data}
-          setData={props.setData}
-        />
+        <SearchBar hideCount={false} setData={props.setData} />
       </div>
 
       <div id="language-select">

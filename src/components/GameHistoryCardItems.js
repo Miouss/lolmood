@@ -1,5 +1,5 @@
 import React from "react";
-import GameHistoryCardTooltip from "./GameHistoryCardTooltip";
+import { GameHistoryCardTooltipItem } from "./GameHistoryCardTooltip";
 
 import enItemsJSON from "../assets/loldata/current/data/en_US/item.json";
 import frItemsJSON from "../assets/loldata/current/data/fr_FR/item.json";
@@ -27,38 +27,39 @@ function GameHistoryCardItems({ idItems, identifier, lang }) {
       <div className="game-history-card-items">
         <div>
           {itemsIconsFirstRow.map((itemIcon, i) => {
+            const key = i + idItems + identifier;
+
             return idItems[i] ? (
-              <GameHistoryCardTooltip
-                key={`${i}${identifier}`}
-                type="items"
-                itemsJSON={itemsJSON}
-                idItems={idItems}
+              <GameHistoryCardTooltipItem
+                key={key}
+                itemsJSON={itemsJSON.data[idItems[i]]}
                 itemIcon={itemIcon}
                 identifier={identifier}
                 index={i}
                 lang={lang}
               />
             ) : (
-              <EmptyItem key={`${i}${identifier}`} />
+              <EmptyItem key={key} />
             );
           })}
         </div>
         <div>
-          {itemsIconsSecondRow.map((itemIcon, i) =>
-            idItems[i + 3] ? (
-              <GameHistoryCardTooltip
-                key={`${i}${identifier}`}
-                type="items"
-                itemsJSON={itemsJSON}
-                idItems={idItems}
+          {itemsIconsSecondRow.map((itemIcon, i) => {
+            i += 3;
+            const key = i + idItems + identifier;
+            return idItems[i] ? (
+              <GameHistoryCardTooltipItem
+                key={key}
+                itemsJSON={itemsJSON.data[idItems[i]]}
                 itemIcon={itemIcon}
-                identifier={identifier}
+                identifier={identifier + identifier}
                 index={i}
+                lang={lang}
               />
             ) : (
-              <EmptyItem key={`${i}${identifier}`} />
-            )
-          )}
+              <EmptyItem key={key} />
+            );
+          })}
         </div>
       </div>
     </>

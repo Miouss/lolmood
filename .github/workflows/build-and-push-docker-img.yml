@@ -13,13 +13,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - env:
-          DOCKER_USERNAME: ${{ github.actor }}
-          DOCKER_PASSWORD: ${{ secrets.PAT }}
-        run: |
-          echo $DOCKER_PASSWORD | docker login ghcr.io -u $DOCKER_USERNAME --password-stdin
-
-
       - name: Build and push Docker image
         run: |
           docker build -t ghcr.io/${{ github.repository_owner }}/lolmood-frontend:latest . -f Dockerfile.prod

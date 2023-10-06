@@ -40,7 +40,7 @@ export default function Footer() {
           >
             <FontAwesomeIcon icon={faLinkedin} size="2x" />
           </a>
-          <span>Developped by Samir Ghabi</span>
+          <span>Developed by Samir Ghabi</span>
         </div>
         <div>
           <a href="https://www.linkedin.com/in/evans-ry/" target="_blank">

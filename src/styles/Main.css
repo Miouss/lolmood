@@ -17,9 +17,22 @@ main {
   justify-content: center;
   align-items: center;
 
+  /* 
   background-image: url("../assets/decor-frame.svg");
   background-repeat: no-repeat;
   background-position: center;
 
-  padding: 1.1rem;
+  padding: 1.1rem; */
+}
+
+.search-container > form {
+  background-image: url("../assets/decor-frame.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 658px;
+  height: 116px;
+}
+
+.search-container > form {
+  padding-left: 6rem;
 }

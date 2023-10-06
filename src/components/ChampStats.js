@@ -83,7 +83,7 @@ function ChampStats() {
 
         <div id="sums-component">
           <Sums
-            summoners={champStats.summoners}
+            summonersData={champStats.summoners}
             displayPickRate={displayPickRate}
           />
         </div>

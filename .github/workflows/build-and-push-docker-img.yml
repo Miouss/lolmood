@@ -15,5 +15,5 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker build -t ghcr.io/${{ github.repository_owner }}/lolmood-frontend:latest . -f Dockerfile.prod
-          docker push ghcr.io/${{ github.repository_owner }}/lolmood-frontend:latest
+          docker build -t ghcr.io/miouss/lolmood-frontend:latest . -f Dockerfile.prod
+          docker push ghcr.io/miouss/lolmood-frontend:latest

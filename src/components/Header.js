@@ -35,7 +35,11 @@ function Header(props) {
             props.setLang("fr");
           }}
         >
-          <img style={{ width: props.frFlagWidth }} src={frenchFlag} />
+          <img
+            style={{ width: props.frFlagWidth }}
+            src={frenchFlag}
+            alt="FR flag"
+          />
         </div>
 
         <div
@@ -45,7 +49,11 @@ function Header(props) {
             props.setLang("en");
           }}
         >
-          <img style={{ width: props.enFlagWidth }} src={englishFlag} />
+          <img
+            style={{ width: props.enFlagWidth }}
+            src={englishFlag}
+            alt="UK flag"
+          />
         </div>
       </div>
     </>

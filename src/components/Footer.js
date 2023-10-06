@@ -1,13 +1,25 @@
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLinkedin } from "@fortawesome/free-brands-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 import "../styles/Footer.css";
 
 export default function Footer() {
+  const [isHovered, setIsHovered] = useState(false);
+  const navigate = useNavigate();
+
   return (
     <>
       <div id="logo-copyright">
-        <h1>LOL Mood</h1>
+        <h1
+          style={{ cursor: isHovered ? "pointer" : "default" }}
+          onClick={() => navigate("/")}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          LOL Mood
+        </h1>
         <p>Copyright © 2022 Ghabi Samir. All Rights Reserved</p>
       </div>
 

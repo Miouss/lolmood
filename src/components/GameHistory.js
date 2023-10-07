@@ -14,7 +14,7 @@ function GameHistory({ data, lang }) {
     );
   });
 
-  const pageLength = GameHistoryCards.length / 5;
+  const pageLength = Math.ceil(GameHistoryCards.length / 5);
 
   const [bgColorPageSelector, setBgColorPageSelector] = useState(() => {
     const array = ["black"];
@@ -44,7 +44,7 @@ function GameHistory({ data, lang }) {
 
   const displayPageSelector = () => {
     const pageSelectorArray = [];
-
+    console.log(pageLength);
     [...Array(pageLength)].forEach((_, i) => {
       pageSelectorArray.push(
         <PageSelector

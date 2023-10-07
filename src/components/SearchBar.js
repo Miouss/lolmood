@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
-const MIN_COUNT = 5;
+const MIN_COUNT = 1;
 const MAX_COUNT = 50;
 
 function SearchBar({ hideCount, setData }) {

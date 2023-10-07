@@ -1,0 +1,54 @@
+{
+    "fr": {
+        "lang": "fr",
+        "rank": "Rang",
+        "winrate": "Victoires",
+        "games": "Parties",
+        "skillPriority": "Compétences prioritaires",
+        "evolvePriority": "Evolution prioritaires",
+        "noEvolve": "Ce champion n'a pas d'évolution",
+        "notEnoughGames": "Pas assez de parties ont été trouvé, il n'y a donc pas de stats à afficher",
+        "mentions": {
+            "dev": "Développé par",
+            "design": "Designé par"
+        },
+        "items": {
+            "set": "Ensemble d'Objets",
+            "start": "Objets de départ",
+            "core": "Objets principaux",
+            "fourth": "4ième objet",
+            "fifth": "5ième objet",
+            "last": "Dernier objet"
+        },
+        "searchBar": {
+            "count": "Nombre de parties",
+            "summoner": "Nom d'invocateur"
+        }
+    },
+    "en": {
+        "lang": "en",
+        "rank": "Rank",
+        "winrate": "Winrate",
+        "games": "Games",
+        "skillPriority": "Skill Priority",
+        "evolvePriority": "Evolution Priority",
+        "noEvolve": "This champ has no evolution",
+        "notEnoughGames": "No games with enough data were found, so there is no items stats to display",
+        "mentions": {
+            "dev": "Developed by",
+            "design": "Designed by"
+        },
+        "items": {
+            "set": "Items Set",
+            "start": "Starting Items",
+            "core": "Core Items",
+            "fourth": "4th Item",
+            "fifth": "5th Item",
+            "last": "Last Item"
+        },
+        "searchBar": {
+            "count": "Number of games",
+            "summoner": "Summoner name"
+        }
+    }
+}

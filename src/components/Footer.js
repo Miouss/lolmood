@@ -2,10 +2,11 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLinkedin } from "@fortawesome/free-brands-svg-icons";
 import { useNavigate } from "react-router-dom";
-
+import { useLangData } from "../App";
 import "../styles/Footer.css";
 
 export default function Footer() {
+  const { mentions } = useLangData();
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
 
@@ -40,13 +41,13 @@ export default function Footer() {
           >
             <FontAwesomeIcon icon={faLinkedin} size="2x" />
           </a>
-          <span>Developed by Samir Ghabi</span>
+          <span>{mentions.dev} Samir Ghabi</span>
         </div>
         <div>
           <a href="https://www.linkedin.com/in/evans-ry/" target="_blank">
             <FontAwesomeIcon icon={faLinkedin} size="2x" />
           </a>
-          <span>Designed by Evans Riss Yaw</span>
+          <span>{mentions.design} Evans Riss Yaw</span>
         </div>
       </div>
     </>

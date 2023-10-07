@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { fetchGamesData } from "./fetchData";
 
@@ -8,7 +8,7 @@ import GameHistory from "./GameHistory";
 
 import "../styles/SummonerStats.css";
 
-function SummonerStats({ data, lang, setData }) {
+function SummonerStats({ data, setData }) {
   const location = useLocation();
 
   async function requestData(summonerName, region) {
@@ -34,7 +34,7 @@ function SummonerStats({ data, lang, setData }) {
           <SummonerCard {...data.account} />
           <StatsByChamp topChampsByMostPlayed={data.topChampsByMostPlayed} />
         </div>
-        <GameHistory data={data.matchesData} lang={lang} />
+        <GameHistory data={data.matchesData} />
       </div>
     </>
   );

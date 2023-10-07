@@ -9,6 +9,7 @@ import { GameHistoryCardTooltipPerk } from "./GameHistoryCardTooltip";
 import { statsModImgs, getRuneImg } from "./runesImg";
 
 import "../styles/GameHistoryCardStyles.css";
+import { useLangData } from "../App";
 
 function GameHistoryCardStyles(props) {
   let perkIcon = getRuneImg(props.idPerk);
@@ -34,7 +35,9 @@ function GameHistoryCardStyles(props) {
   let primaryRuneJSON = undefined;
   let subRuneJSON = undefined;
 
-  let runesJSON = props.lang === "fr" ? frRunesJSON : enRunesJSON;
+  const { lang } = useLangData();
+
+  let runesJSON = lang === "fr" ? frRunesJSON : enRunesJSON;
 
   runesJSON.forEach((style) => {
     if (style["id"] === props.idPrimaryStyle) {

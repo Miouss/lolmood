@@ -2,10 +2,13 @@ import { getItemImg } from "./runesImg";
 
 import itemSetFrameSVG from "../assets/items-set-frame.svg";
 import itemSetDesignSVG from "../assets/items-set-design.svg";
+import { useLangData } from "../App";
 
 import "../styles/ChampItems.css";
 
 function ChampItems({ starting, completed: { core, nth }, displayPickRate }) {
+  const { items } = useLangData();
+
   const startItems = {
     MP: initializeItems(starting.mostPlayed),
     MW: initializeItems(starting.mostWinrate, false),
@@ -35,20 +38,20 @@ function ChampItems({ starting, completed: { core, nth }, displayPickRate }) {
 
   return (
     <div id="items-frame">
-      <span id="items-set-title">Item Set</span>
+      <span id="items-set-title">{items.set}</span>
       <div id="all-items-and-svgs-container">
         <img id="items-frame-img" src={itemSetFrameSVG} />
         <img id="items-design-img" src={itemSetDesignSVG} />
         <div id="all-items-container">
           <div id="starting-items">
-            <span className="items-title">Starting Items</span>
+            <span className="items-title">{items.start}</span>
             <div className="items-display-area">
               {getMultipleItemsContainer(startItems[keyType], "startItems")}
             </div>
           </div>
 
           <div id="core-items">
-            <span className="items-title">Core Items</span>
+            <span className="items-title">{items.core}</span>
             <div className="items-display-area">
               {getMultipleItemsContainer(coreItems[keyType], "coreItems")}
             </div>
@@ -56,7 +59,7 @@ function ChampItems({ starting, completed: { core, nth }, displayPickRate }) {
 
           <div id="fourth-fifth-items-container">
             <div>
-              <span className="items-title">4th Item</span>
+              <span className="items-title">{items.fourth}</span>
               {displayPickRate
                 ? getPickRateContainerForNthItems(nthItems[4][keyType])
                 : null}
@@ -66,7 +69,7 @@ function ChampItems({ starting, completed: { core, nth }, displayPickRate }) {
             </div>
 
             <div>
-              <span className="items-title">5th Item </span>
+              <span className="items-title">{items.fifth}</span>
               {displayPickRate
                 ? getPickRateContainerForNthItems(nthItems[5]?.[keyType])
                 : null}
@@ -78,7 +81,7 @@ function ChampItems({ starting, completed: { core, nth }, displayPickRate }) {
 
           <div id="sixth-items">
             <span className="items-title">
-              Last Item{" "}
+              {items.last}{" "}
               {displayPickRate
                 ? getPickRateContainerForNthItems(nthItems[6]?.[keyType])
                 : null}
@@ -151,17 +154,28 @@ function getSingleItemContainer(itemsArray, displayPickRate) {
     return <EmptyItemsContainer />;
   }
 
-  const itemContainer = [];
+  const ItemContainer = ({ src, played, rate }) => {
+    const { games } = useLangData();
 
-  itemsArray.forEach((item) => {
-    itemContainer.push(
+    return (
       <div className="single-item-container">
-        <img className="items-img" src={item["img"]} />
+        <img className="items-img" src={src} />
         <div className="single-item-container-rate">
-          <span>{item["rate"]}%</span>
-          {displayPickRate ? null : <span>{item["played"]} games</span>}
+          <span>{rate}%</span>
+          {displayPickRate ? null : (
+            <span>
+              {played} {games}
+            </span>
+          )}
         </div>
       </div>
+    );
+  };
+  const itemContainer = [];
+
+  itemsArray.forEach(({ img, played, rate }, i) => {
+    itemContainer.push(
+      <ItemContainer key={i} src={img} played={played} rate={rate} />
     );
   });
 
@@ -211,9 +225,11 @@ function getMultipleItemsContainer(itemsArray) {
 }
 
 function NthItemContainer({ played }) {
+  const { games } = useLangData();
+
   return (
     <span className="nth-items-container" style={{ paddingLeft: "0.4rem" }}>
-      ({played} games)
+      ({played} {games})
     </span>
   );
 }
@@ -236,21 +252,21 @@ function DuplicateStartItemContainer({ itemId, img }) {
 }
 
 function ItemContainerRate({ rate, played }) {
+  const { games } = useLangData();
+
   return (
     <div className="single-item-container-rate">
       <span>{rate}%</span>
-      <span>{played} games</span>
+      <span>
+        {played} {games}
+      </span>
     </div>
   );
 }
 
 function EmptyItemsContainer() {
-  return (
-    <div class="empty-items-container">
-      No games with enough data were found, so there is no items stats to
-      display
-    </div>
-  );
+  const { notEnoughGames } = useLangData();
+  return <div class="empty-items-container">{notEnoughGames}</div>;
 }
 
 export default ChampItems;

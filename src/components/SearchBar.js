@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchGamesData } from "./fetchData";
 
@@ -10,10 +10,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
+import { useLangData } from "../App";
+
 const MIN_COUNT = 1;
 const MAX_COUNT = 50;
 
 function SearchBar({ hideCount, setData }) {
+  const lang = useLangData();
+
   const navigate = useNavigate();
 
   const regionSelectedRef = useRef();
@@ -121,7 +125,7 @@ function SearchBar({ hideCount, setData }) {
         style={{ backgroundPosition: `${summonerBackground}` }}
       >
         <label htmlFor="summoner-search" onClick={handleOnClickSummoner}>
-          Summoner Search
+          {lang.searchBar.summoner}
         </label>
         <input
           hidden={isSummonerInputHidden}
@@ -135,7 +139,7 @@ function SearchBar({ hideCount, setData }) {
         style={{ backgroundPosition: `${countBackground}` }}
       >
         <label htmlFor="count-search" onClick={handleOnClickCount}>
-          Number of games
+          {lang.searchBar.count}
         </label>
         <input
           hidden={isCountInputHidden}

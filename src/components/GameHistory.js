@@ -5,13 +5,11 @@ import PageSelector from "./GameHistoryPageSelector";
 
 import "../styles/GameHistory.css";
 
-function GameHistory({ data, lang }) {
+function GameHistory({ data }) {
   const GameHistoryCards = [];
 
   data.forEach((match, i) => {
-    GameHistoryCards.push(
-      <GameHistoryCard key={i} match={match} lang={lang} />
-    );
+    GameHistoryCards.push(<GameHistoryCard key={i} match={match} />);
   });
 
   const pageLength = Math.ceil(GameHistoryCards.length / 5);

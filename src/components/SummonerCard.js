@@ -1,10 +1,16 @@
 import { getEmblemeImg } from "./runesImg";
 
 import frameSVG from "../assets/summoner-details-frame.svg";
-
+import { useLangData } from "../App";
 import "../styles/SummonerCard.css";
 
 function SummonerCard({ name, grade, lp, games, wins, tier }) {
+  const {
+    rank: rankLabel,
+    games: gamesLabel,
+    winrate: winrateLabel,
+  } = useLangData();
+
   const rankIcon = getEmblemeImg(grade);
 
   const rank = `${grade} ${tier}`;
@@ -25,10 +31,10 @@ function SummonerCard({ name, grade, lp, games, wins, tier }) {
 
         <div id="summoner-stats-frame">
           <div>
-            <span>Rank</span>
+            <span>{rankLabel}</span>
             <span>LP</span>
-            <span>Games</span>
-            <span>Winrate</span>
+            <span>{gamesLabel}</span>
+            <span>{winrateLabel}</span>
           </div>
 
           <div>

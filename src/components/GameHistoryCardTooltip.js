@@ -1,13 +1,14 @@
 import React from "react";
 import ReactTooltip from "react-tooltip";
+import { useLangData } from "../App";
 
 export function GameHistoryCardTooltipItem({
   itemsJSON,
   identifier,
   itemIcon,
   index,
-  lang,
 }) {
+  const { lang } = useLangData();
   const plusPrefixClass = lang === "en" ? "plus-prefix" : "";
 
   return (

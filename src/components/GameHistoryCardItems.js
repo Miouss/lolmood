@@ -5,10 +5,11 @@ import enItemsJSON from "../assets/loldata/current/data/en_US/item.json";
 import frItemsJSON from "../assets/loldata/current/data/fr_FR/item.json";
 
 import { getItemImg } from "./runesImg";
+import { useLangData } from "../App";
 
 import "../styles/GameHistoryCardItems.css";
 
-function GameHistoryCardItems({ idItems, identifier, lang }) {
+function GameHistoryCardItems({ idItems, identifier }) {
   const itemsIconsFirstRow = [];
   const itemsIconsSecondRow = [];
 
@@ -20,6 +21,7 @@ function GameHistoryCardItems({ idItems, identifier, lang }) {
     }
   }
 
+  const { lang } = useLangData();
   const itemsJSON = lang === "fr" ? frItemsJSON : enItemsJSON;
 
   return (
@@ -36,7 +38,6 @@ function GameHistoryCardItems({ idItems, identifier, lang }) {
                 itemIcon={itemIcon}
                 identifier={identifier}
                 index={i}
-                lang={lang}
               />
             ) : (
               <EmptyItem key={key} />
@@ -54,7 +55,6 @@ function GameHistoryCardItems({ idItems, identifier, lang }) {
                 itemIcon={itemIcon}
                 identifier={identifier + identifier}
                 index={i}
-                lang={lang}
               />
             ) : (
               <EmptyItem key={key} />

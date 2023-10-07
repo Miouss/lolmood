@@ -3,12 +3,14 @@ import { getSpellImg } from "./runesImg";
 import champJSON from "../assets/loldata/current/data/en_US/championFull.json";
 
 import "../styles/ChampSkills.css";
+import { useLangData } from "../App";
 
 const MAX_LVL = 18;
 const MAX_SKILL_LVL = 5;
 
 function ChampSkills({ evolves, champName, skills, displayPickrate }) {
   const { spells } = champJSON.data[champName];
+  const lang = useLangData();
 
   const qImg = getSpellImg(spells[0].id);
   const wImg = getSpellImg(spells[1].id);
@@ -98,7 +100,7 @@ function ChampSkills({ evolves, champName, skills, displayPickrate }) {
 
   const SkillPriorityFrame = ({ children }) => (
     <div id="skills-priority-frame">
-      <span>Skills priority</span>
+      <span>{lang.skillPriority}</span>
       <div className="skills-priority-container">{children}</div>
     </div>
   );
@@ -123,7 +125,7 @@ function ChampSkills({ evolves, champName, skills, displayPickrate }) {
 
   const EvolvePriorityFrame = ({ children }) => (
     <div id="skills-speciality-frame">
-      <span>Evolution Priority</span>
+      <span>{lang.evolvePriority}</span>
       <div className="skills-priority-container">{children}</div>
     </div>
   );
@@ -136,7 +138,7 @@ function ChampSkills({ evolves, champName, skills, displayPickrate }) {
 
   const EmptyEvolveContainer = () => (
     <span style={{ flex: "1", fontStyle: "italic", margin: "1rem" }}>
-      This champ has no evolution
+      {lang.noEvolve}
     </span>
   );
 

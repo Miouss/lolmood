@@ -9,7 +9,6 @@ import { getSummonerImg } from "./runesImg";
 import "../styles/GameHistoryCard.css";
 
 function GameHistoryCard({
-  lang,
   match: {
     matchId,
     items,
@@ -73,13 +72,8 @@ function GameHistoryCard({
           idSubStyle={subStyleId}
           idPerk={perkId}
           identifier={matchId}
-          lang={lang}
         />
-        <GameHistoryCardItems
-          idItems={items}
-          identifier={matchId}
-          lang={lang}
-        />
+        <GameHistoryCardItems idItems={items} identifier={matchId} />
 
         <div
           className="game-history-card-kda"
